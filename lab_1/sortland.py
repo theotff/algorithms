@@ -10,4 +10,6 @@ for i in range(1, people):
         if sortlist[j] <= sortlist[j - 1]:
             sortlist[j], sortlist[j - 1] = sortlist[j - 1], sortlist[j]
 
-print(str(numbers.index(sortlist[0]) + 1) + ' ' + str(numbers.index(sortlist[people//2]) + 1) + ' ' + str(numbers.index(sortlist[people - 1]) + 1), file = fout)
+print(str(numbers.index(sortlist[0]) + 1) + ' ' +
+        str(numbers.index(sortlist[people//2]) + 1) + ' ' +
+        str(numbers.index(sortlist[people - 1]) + 1), file = fout)
