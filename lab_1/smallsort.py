@@ -1,25 +1,13 @@
-import random
-
-fin = open('smallsort.in', 'r')
+f = open('smallsort.in', 'r')
 fout = open('smallsort.out', 'w')
 
-data = fin.read().strip().split('\n')
-numbers_raw = data[1].split()
+n = int(f.readline().strip())
+numbers = [int(i) for i in f.readline().split()]
+for i in range(1, n):
+    for j in range(i, 0, -1):
+        if numbers[j] < numbers[j - 1]:
+            numbers[j], numbers[j - 1] = numbers[j - 1], numbers[j]
+        else:
+            break
 
-numbers = [int(i) for i in numbers_raw if i.strip('-').isnumeric()]
-
-def quicksort(array: list) -> list:
-    if len(array) < 2:
-        return array
-    else:
-        index = random.randint(0, len(array) - 1)
-        pivot = array[index]
-        array.pop(index)
-        less = [i for i in array if i <= pivot]
-        greater = [i for i in array if i > pivot]
-
-        result = quicksort(less) + [pivot] + quicksort(greater)
-        return result
-
-r = quicksort(numbers)
-print(' '.join([str(i) for i in r]), file = fout)
+print(' '.join([str(i) for i in numbers]), file = fout)

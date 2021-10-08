@@ -3,7 +3,7 @@ fout = open('sortland.out', 'w')
 
 people = int(fin.readline().strip())
 numbers = [float(i) for i in fin.readline().split()]
-sortlist = numbers.copy()
+sortlist = numbers[:]
 
 for i in range(1, people):
     for j in range(i, 0, -1):

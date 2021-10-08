@@ -1,3 +1,5 @@
 *.in
 *.out
 misc/
+/.vscode
+/lab_2_test
