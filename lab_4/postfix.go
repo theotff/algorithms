@@ -47,7 +47,6 @@ func main() {
 			}
 		}
 	}
-	fmt.Println(stack)
 	fout, _ := os.Create("postfix.out")
 	fout.WriteString(fmt.Sprint(stack[0]))
 	fout.Close()
