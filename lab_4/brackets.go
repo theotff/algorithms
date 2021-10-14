@@ -6,6 +6,47 @@ import (
 	"strings"
 )
 
+type Node struct {
+	data string
+	next *Node
+}
+
+type LinkedList struct {
+	last *Node
+}
+
+func (list *LinkedList) insert(data string) {
+	if list.last == nil {
+		node := &Node{data: data}
+		list.last = node
+	} else {
+		if list.last.data == "(" && data == ")" {
+			if list.last.next != nil {
+				list.last = list.last.next
+			} else {
+				list.last = nil
+			}
+		} else if list.last.data == "[" && data == "]" {
+			if list.last.next != nil {
+				list.last = list.last.next
+			} else {
+				list.last = nil
+			}
+		} else {
+			node := &Node{data: data, next: list.last}
+			list.last = node
+		}
+	}
+}
+
+func (list *LinkedList) check_state() bool {
+	if list.last == nil {
+		return true
+	} else {
+		return false
+	}
+}
+
 func main() {
 	fin, _ := os.Open("brackets.in")
 	scanner := bufio.NewScanner(fin)
@@ -13,32 +54,13 @@ func main() {
 
 	for scanner.Scan() {
 		brackets := strings.Split(scanner.Text(), "")
-		stack := make([]string, len(brackets))
-		stack_index := 0
+		list := &LinkedList{}
+
 		for _, elem := range brackets {
-			if stack_index != 0 {
-				if stack[stack_index-1] == "(" && elem == ")" {
-					stack_index -= 1
-					stack[stack_index] = ""
-				} else if stack[stack_index-1] == "[" && elem == "]" {
-					stack_index -= 1
-					stack[stack_index] = ""
-				} else {
-					stack[stack_index] = elem
-					stack_index += 1
-				}
-			} else {
-				stack[stack_index] = elem
-				stack_index += 1
-			}
+			list.insert(elem)
 		}
-		state := true
-		for _, elem := range stack {
-			if elem != "" {
-				state = false
-			}
-		}
-		if state {
+
+		if list.check_state() {
 			results = append(results, "YES")
 		} else {
 			results = append(results, "NO")

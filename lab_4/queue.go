@@ -7,6 +7,34 @@ import (
 	"strings"
 )
 
+type Node struct {
+	data int
+	next *Node
+}
+
+type LinkedList struct {
+	first *Node
+	last  *Node
+}
+
+func (list *LinkedList) insert(data int) {
+	if list.last == nil {
+		node := &Node{data: data}
+		list.first = node
+		list.last = node
+	} else {
+		node := &Node{data: data}
+		list.first.next = node
+		list.first = node
+	}
+}
+
+func (list *LinkedList) remove() int {
+	value := list.last.data
+	list.last = list.last.next
+	return value
+}
+
 func main() {
 	var n int
 	fin, _ := os.Open("queue.in")
@@ -15,24 +43,20 @@ func main() {
 	scanner.Scan()
 	fmt.Sscanf(scanner.Text(), "%d", &n)
 
-	queue := make([]int, n)
-	l_index := 0
-	r_index := 0
 	var results []int
+	list := &LinkedList{}
 
 	for scanner.Scan() {
 		operation := scanner.Text()
 		if len(operation) == 1 {
-			results = append(results, queue[l_index])
-			queue[l_index] = 0
-			l_index += 1
+			results = append(results, list.remove())
 		} else {
 			var num int
 			fmt.Sscanf(operation, "+ %d", &num)
-			queue[r_index] = num
-			r_index += 1
+			list.insert(num)
 		}
 	}
+
 	result_arr := make([]string, len(results))
 
 	for i := 0; i < len(results); i++ {

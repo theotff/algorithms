@@ -8,46 +8,64 @@ import (
 	"strings"
 )
 
-var stack = make([]int, 150)
-var index = 0
-
-func add() {
-	stack[index-2] = stack[index-2] + stack[index-1]
-	stack[index-1] = 0
-	index -= 1
+type Node struct {
+	data int
+	next *Node
 }
 
-func subtract() {
-	stack[index-2] = stack[index-2] - stack[index-1]
-	stack[index-1] = 0
-	index -= 1
+type LinkedList struct {
+	last *Node
 }
 
-func multiply() {
-	stack[index-2] = stack[index-2] * stack[index-1]
-	stack[index-1] = 0
-	index -= 1
+func (list *LinkedList) insert(data int) {
+	node := &Node{data: data, next: list.last}
+	list.last = node
+}
+
+func (list *LinkedList) remove() int {
+	value := list.last.data
+	list.last = list.last.next
+	return value
+}
+
+func (list *LinkedList) add() {
+	val1 := list.remove()
+	val2 := list.remove()
+	list.insert(val2 + val1)
+}
+
+func (list *LinkedList) subtract() {
+	val1 := list.remove()
+	val2 := list.remove()
+	list.insert(val2 - val1)
+}
+
+func (list *LinkedList) multiply() {
+	val1 := list.remove()
+	val2 := list.remove()
+	list.insert(val2 * val1)
 }
 
 func main() {
 	data_raw, _ := ioutil.ReadFile("postfix.in")
-	data := strings.Split(string(data_raw), " ")
+	data := strings.Split(string(data_raw), "")
+
+	stack := &LinkedList{}
 
 	for _, elem := range data {
 		if num, err := strconv.Atoi(elem); err == nil {
-			stack[index] = num
-			index += 1
+			stack.insert(num)
 		} else {
 			if elem == "-" {
-				subtract()
+				stack.subtract()
 			} else if elem == "+" {
-				add()
+				stack.add()
 			} else if elem == "*" {
-				multiply()
+				stack.multiply()
 			}
 		}
 	}
 	fout, _ := os.Create("postfix.out")
-	fout.WriteString(fmt.Sprint(stack[0]))
+	fout.WriteString(fmt.Sprint(stack.last.data))
 	fout.Close()
 }
