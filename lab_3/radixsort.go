@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func quicksort(array []string, k int) []string {
@@ -38,11 +39,10 @@ func quicksort(array []string, k int) []string {
 }
 
 func radixsort(array []string, k int) []string {
-	var result []string
+	var result = array
 	n := len(array)
 	for i := 0; i < k; i++ {
-		result = quicksort(array, n-i-1)
-		fmt.Println(n - i - 1)
+		result = quicksort(result, n-i-1)
 	}
 	return result
 }
@@ -61,6 +61,7 @@ func main() {
 	}
 
 	result := radixsort(array, k)
-
-	fmt.Println(result)
+	fout, _ := os.Create("radixsort.out")
+	fout.WriteString(strings.Join(result, "\n"))
+	fout.Close()
 }

@@ -17,13 +17,8 @@ type LinkedList struct {
 }
 
 func (list *LinkedList) insert(data int) {
-	if list.last == nil {
-		node := &Node{data: data}
-		list.last = node
-	} else {
-		node := &Node{data: data, next: list.last}
-		list.last = node
-	}
+	node := &Node{data: data, next: list.last}
+	list.last = node
 }
 
 func (list *LinkedList) remove() int {
