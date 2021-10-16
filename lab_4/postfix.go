@@ -56,11 +56,12 @@ func main() {
 		if num, err := strconv.Atoi(elem); err == nil {
 			stack.insert(num)
 		} else {
-			if elem == "-" {
+			switch elem {
+			case "-":
 				stack.subtract()
-			} else if elem == "+" {
+			case "+":
 				stack.add()
-			} else if elem == "*" {
+			case "*":
 				stack.multiply()
 			}
 		}

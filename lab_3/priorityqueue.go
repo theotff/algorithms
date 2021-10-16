@@ -91,17 +91,18 @@ func main() {
 
 	for scanner.Scan() {
 		txt := scanner.Text()
-		if strings.HasPrefix(txt, "push") {
+		switch {
+		case strings.HasPrefix(txt, "push"):
 			var n int
 			fmt.Sscanf(txt, "push %d", &n)
 			queue.push(n, pos)
 			pos += 1
-		} else if strings.HasPrefix(txt, "decrease-key") {
+		case strings.HasPrefix(txt, "decrease-key"):
 			var n, m int
 			fmt.Sscanf(txt, "decrease-key %d %d", &n, &m)
 			queue.replace(m, n)
 			pos += 1
-		} else {
+		default:
 			result, state := queue.remove_min()
 			if state {
 				results = append(results, fmt.Sprint(result))
