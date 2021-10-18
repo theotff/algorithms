@@ -47,7 +47,7 @@ func (list *Dll) delete(key string) {
 		if node.key == key {
 			if node.prev != nil {
 				if node.next != nil {
-					node.prev.next, node.next.prev = node.next.prev, node.prev.next
+					node.prev.next, node.next.prev = node.next, node.prev
 				} else {
 					node.prev.next = nil
 				}
