@@ -7,76 +7,20 @@ import (
 	"strings"
 )
 
-type Node struct {
-	data     int
-	position int
-	next     *Node
-}
-
-type LinkedList struct {
-	last *Node
-}
-
-func (queue *LinkedList) push(data int, pos int) {
-	node := &Node{data: data, position: pos, next: queue.last}
-
-	qnode := queue.last
-	if qnode != nil {
-		if qnode.next != nil {
-			for qnode != nil {
-				if data < qnode.data {
-					queue.last = node
-					break
-				} else if qnode.data <= data && qnode.next == nil {
-					node.next = nil
-					qnode.next = node
-					break
-				} else if qnode.data <= data && qnode.next.data > data {
-					node.next = qnode.next
-					qnode.next = node
-					break
-				} else {
-					qnode = qnode.next
-				}
+func makeheap(array [][]int) [][]int {
+	n := len(array)
+	for i := 0; i < n; i++ {
+		index := i
+		for index != 0 {
+			parent := (index - 1) / 2
+			if array[index][0] >= array[parent][0] {
+				break
 			}
-		} else {
-			if data < qnode.data {
-				queue.last = node
-			} else {
-				node.next = nil
-				queue.last.next = node
-			}
-		}
-	} else {
-		queue.last = node
-	}
-}
-
-func (queue *LinkedList) replace(data int, pos int) {
-	node := queue.last
-	next := node.next
-
-	for next != nil {
-		if next.position == pos {
-			node.next = next.next
-			break
-		} else {
-			node = node.next
-			next = node.next
+			array[index], array[parent] = array[parent], array[index]
+			index = parent
 		}
 	}
-
-	queue.push(data, pos)
-}
-
-func (queue *LinkedList) remove_min() (int, bool) {
-	if queue.last != nil {
-		value := queue.last.data
-		queue.last = queue.last.next
-		return value, true
-	} else {
-		return 0, false
-	}
+	return array
 }
 
 func main() {
@@ -84,10 +28,9 @@ func main() {
 	scanner := bufio.NewScanner(fin)
 	scanner.Split(bufio.ScanLines)
 
-	queue := &LinkedList{}
-	pos := 1
-
 	var results []string
+	var heap [][]int
+	index := 0
 
 	for scanner.Scan() {
 		txt := scanner.Text()
@@ -95,23 +38,36 @@ func main() {
 		case strings.HasPrefix(txt, "push"):
 			var n int
 			fmt.Sscanf(txt, "push %d", &n)
-			queue.push(n, pos)
-			pos += 1
+			arr := []int{n, index}
+			heap = makeheap(append(heap, arr))
+			index += 1
+
 		case strings.HasPrefix(txt, "decrease-key"):
 			var n, m int
 			fmt.Sscanf(txt, "decrease-key %d %d", &n, &m)
-			queue.replace(m, n)
-			pos += 1
-		default:
-			result, state := queue.remove_min()
-			if state {
-				results = append(results, fmt.Sprint(result))
-			} else {
-				results = append(results, "*")
+			len := len(heap)
+
+			for i := 0; i < len; i++ {
+				if heap[i][1] == n-1 {
+					heap[i][0] = m
+					break
+				}
 			}
-			pos += 1
+			heap = makeheap(heap)
+
+		default:
+			var result string
+			if len(heap) >= 1 {
+				result = fmt.Sprint(heap[0][0])
+				heap = heap[1:]
+			} else {
+				result = "*"
+			}
+			results = append(results, result)
+			heap = makeheap(heap)
 		}
 	}
+
 	fout, _ := os.Create("priorityqueue.out")
 	fout.WriteString(strings.Join(results, "\n"))
 	fout.Close()

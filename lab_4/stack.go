@@ -28,12 +28,10 @@ func (list *LinkedList) remove() int {
 }
 
 func main() {
-	var n int
 	fin, _ := os.Open("stack.in")
 	scanner := bufio.NewScanner(fin)
 	scanner.Split(bufio.ScanLines)
 	scanner.Scan()
-	fmt.Sscanf(scanner.Text(), "%d", &n)
 
 	var results []int
 	list := &LinkedList{}

@@ -38,11 +38,10 @@ func quicksort(array []string, k int) []string {
 	}
 }
 
-func radixsort(array []string, k int) []string {
+func radixsort(array []string, m int, k int) []string {
 	var result = array
-	n := len(array)
 	for i := 0; i < k; i++ {
-		result = quicksort(result, n-i-1)
+		result = quicksort(result, m-i-1)
 	}
 	return result
 }
@@ -60,7 +59,7 @@ func main() {
 		array = append(array, scanner.Text())
 	}
 
-	result := radixsort(array, k)
+	result := radixsort(array, m, k)
 	fout, _ := os.Create("radixsort.out")
 	fout.WriteString(strings.Join(result, "\n"))
 	fout.Close()
