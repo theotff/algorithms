@@ -10,58 +10,50 @@ type Node struct {
 	key   string
 	value string
 	next  *Node
-	prev  *Node
 }
 
-type Dll struct {
+type LinkedList struct {
 	last *Node
 }
 
-func (list *Dll) put(key string, value string) {
+func (list *LinkedList) insert(key string, value string) {
 	if list.get(key) == "none" {
-		node := &Node{key: key, value: value, next: list.last, prev: nil}
-		if list.last != nil {
-			list.last.prev = node
-		}
+		node := &Node{key: key, value: value, next: list.last}
 		list.last = node
 	}
 }
 
-func (list *Dll) get(key string) string {
-	if list != nil {
-		node := list.last
-		for node != nil {
-			if node.key == key {
-				return node.value
-			} else {
-				node = node.next
-			}
+func (list *LinkedList) get(key string) string {
+	node := list.last
+	for node != nil {
+		if node.key == key {
+			return node.value
+		} else {
+			node = node.next
 		}
 	}
 	return "none"
 }
 
-func (list *Dll) delete(key string) {
+func (list *LinkedList) delete(key string) {
 	node := list.last
 	for node != nil {
-		if node.key == key {
-			if node.prev != nil {
-				if node.next != nil {
-					node.prev.next, node.next.prev = node.next, node.prev
+		if node.next != nil {
+			if node.next.key == key {
+				if node.next.next != nil {
+					node.next = node.next.next
 				} else {
-					node.prev.next = nil
+					node.next = nil
 				}
+				return
 			} else {
-				if node.next != nil {
-					node.next.prev = nil
-					list.last = node.next
-				} else {
-					list.last = nil
-				}
+				node = node.next
+			}
+		} else {
+			if node.key == key {
+				list.last = nil
 			}
 			return
-		} else {
-			node = node.next
 		}
 	}
 }
@@ -78,22 +70,25 @@ func main() {
 	fin, _ := os.Open("map.in")
 	scanner := bufio.NewScanner(fin)
 	scanner.Split(bufio.ScanLines)
-	mod := 100
-	table := make([]Dll, mod)
+
+	mod := 10000
+	table := make([]LinkedList, mod)
 	var results []string
 
 	for scanner.Scan() {
 		txt := scanner.Text()
 		switch {
 		case strings.HasPrefix(txt, "put"):
-			split := strings.Split(txt[4:], " ")
-			key, value := split[0], split[1]
-			table[hash(key, mod)].put(key, value)
+			fields := strings.Fields(txt)
+			key, value := fields[1], fields[2]
+			table[hash(key, mod)].insert(key, value)
+
 		case strings.HasPrefix(txt, "get"):
-			key := txt[4:]
+			key := strings.Fields(txt)[1]
 			results = append(results, table[hash(key, mod)].get(key))
+
 		case strings.HasPrefix(txt, "delete"):
-			key := txt[7:]
+			key := strings.Fields(txt)[1]
 			table[hash(key, mod)].delete(key)
 		}
 	}

@@ -12,57 +12,49 @@ import (
 type Node struct {
 	data int
 	next *Node
-	prev *Node
 }
 
-type Dll struct {
+type LinkedList struct {
 	last *Node
 }
 
-func (list *Dll) insert(val int) {
+func (list *LinkedList) insert(val int) {
 	if !(list.exists(val)) {
-		node := &Node{data: val, next: list.last, prev: nil}
-		if list.last != nil {
-			list.last.prev = node
-		}
+		node := &Node{data: val, next: list.last}
 		list.last = node
 	}
 }
 
-func (list *Dll) delete(val int) {
+func (list *LinkedList) delete(val int) {
 	node := list.last
 	for node != nil {
-		if node.data == val {
-			if node.prev != nil {
-				if node.next != nil {
-					node.prev.next, node.next.prev = node.next, node.prev
+		if node.next != nil {
+			if node.next.data == val {
+				if node.next.next != nil {
+					node.next = node.next.next
 				} else {
-					node.prev.next = nil
+					node.next = nil
 				}
+				return
 			} else {
-				if node.next != nil {
-					node.next.prev = nil
-					list.last = node.next
-				} else {
-					list.last = nil
-				}
+				node = node.next
+			}
+		} else {
+			if node.data == val {
+				list.last = nil
 			}
 			return
-		} else {
-			node = node.next
 		}
 	}
 }
 
-func (list *Dll) exists(val int) bool {
-	if list != nil {
-		node := list.last
-		for node != nil {
-			if node.data == val {
-				return true
-			} else {
-				node = node.next
-			}
+func (list *LinkedList) exists(val int) bool {
+	node := list.last
+	for node != nil {
+		if node.data == val {
+			return true
+		} else {
+			node = node.next
 		}
 	}
 	return false
@@ -78,7 +70,7 @@ func main() {
 	scanner.Split(bufio.ScanLines)
 
 	mod := 10000
-	table := make([]Dll, mod)
+	table := make([]LinkedList, mod)
 	var results []bool
 
 	for scanner.Scan() {
@@ -89,10 +81,12 @@ func main() {
 			var n int
 			fmt.Sscanf(txt, "insert %d", &n)
 			table[hash(n, mod)].insert(n)
+
 		case strings.HasPrefix(txt, "delete"):
 			var n int
 			fmt.Sscanf(txt, "delete %d", &n)
 			table[hash(n, mod)].delete(n)
+
 		case strings.HasPrefix(txt, "exists"):
 			var n int
 			fmt.Sscanf(txt, "exists %d", &n)
