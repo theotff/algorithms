@@ -106,8 +106,8 @@ func (list *LinkedList) deleteall(key string) {
 
 func hash(key string, mod int) int {
 	sum := 0
-	for _, elem := range strings.Split(key, "") {
-		sum += int([]rune(elem)[0])
+	for _, elem := range key {
+		sum += int(elem)
 	}
 	return sum % mod
 }
