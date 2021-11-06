@@ -21,17 +21,11 @@ func (list *LinkedList) insert(data string) {
 		list.last = node
 	} else {
 		if list.last.data == "(" && data == ")" {
-			if list.last.next != nil {
-				list.last = list.last.next
-			} else {
-				list.last = nil
-			}
+			list.last = list.last.next
+
 		} else if list.last.data == "[" && data == "]" {
-			if list.last.next != nil {
-				list.last = list.last.next
-			} else {
-				list.last = nil
-			}
+			list.last = list.last.next
+
 		} else {
 			node := &Node{data: data, next: list.last}
 			list.last = node
