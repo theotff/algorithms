@@ -82,7 +82,7 @@ func main() {
 			if strings.HasPrefix(elem, ":") && len(elem) > 1 {
 				if elem[1:] == label {
 					table[hash(label, mod)].hash_put(label, index)
-					return index - 1
+					return index
 				}
 			}
 		}
@@ -94,31 +94,54 @@ func main() {
 		switch {
 		case op == "+":
 			value := queue.queue_get() + queue.queue_get()
-			queue.queue_put(value & intsize)
+			queue.queue_put(value % intsize)
 			index += 1
 
 		case op == "-":
 			value := queue.queue_get() - queue.queue_get()
-			queue.queue_put(value & intsize)
+
+			if value < 0 {
+				value = intsize + value
+			}
+
+			queue.queue_put(value % intsize)
 			index += 1
 
 		case op == "*":
 			value := queue.queue_get() * queue.queue_get()
-			queue.queue_put(value & intsize)
+			queue.queue_put(value % intsize)
 			index += 1
 
 		case op == "/":
-			value := queue.queue_get() / queue.queue_get()
-			queue.queue_put(value & intsize)
+			x := queue.queue_get()
+			y := queue.queue_get()
+			var value int
+
+			if y != 0 {
+				value = x / y
+			} else {
+				value = 0
+			}
+
+			queue.queue_put(value % intsize)
 			index += 1
 
 		case op == "%":
-			value := queue.queue_get() % queue.queue_get()
-			queue.queue_put(value & intsize)
+			x := queue.queue_get()
+			y := queue.queue_get()
+			var value int
+
+			if y != 0 {
+				value = x % y
+			} else {
+				value = 0
+			}
+
+			queue.queue_put(value % intsize)
 			index += 1
 
 		case op == "P":
-			results = append(results, fmt.Sprint(queue.queue_get()))
+			results = append(results, fmt.Sprint(queue.queue_get()), "\n")
 			index += 1
 
 		case op == "C":
@@ -140,7 +163,7 @@ func main() {
 
 		case strings.HasPrefix(op, "P"):
 			reg_index := int([]rune(strings.ToLower(op[1:]))[0]) - 97
-			results = append(results, fmt.Sprint(registers[reg_index]))
+			results = append(results, fmt.Sprint(registers[reg_index]), "\n")
 			index += 1
 
 		case strings.HasPrefix(op, "C"):
@@ -178,7 +201,7 @@ func main() {
 				} else {
 					label_index = find_func_index(label)
 				}
-				index = label_index + 1
+				index = label_index
 			}
 			index += 1
 
@@ -196,7 +219,7 @@ func main() {
 				} else {
 					label_index = find_func_index(label)
 				}
-				index = label_index + 1
+				index = label_index
 			}
 			index += 1
 
@@ -214,17 +237,19 @@ func main() {
 				} else {
 					label_index = find_func_index(label)
 				}
-				index = label_index + 1
+				index = label_index
 			}
 			index += 1
 
 		default:
-			num, _ := strconv.Atoi(op)
-			queue.queue_put(num)
+			num, err := strconv.Atoi(op)
+			if err == nil {
+				queue.queue_put(num % intsize)
+			}
 			index += 1
 		}
 	}
 	fout, _ := os.Create("quack.out")
-	fout.WriteString(strings.Join(results, "\n"))
+	fout.WriteString(strings.Join(results, ""))
 	fout.Close()
 }
