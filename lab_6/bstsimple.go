@@ -66,8 +66,6 @@ func (tree *BST) exists(value int) bool {
 }
 
 func (tree *BST) delete(value int) {
-	//fmt.Println("Root before delete", tree.root.value)
-
 	node := tree.search(tree.root, value)
 	if node != nil {
 		if node.right == nil && node.left == nil {
