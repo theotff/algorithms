@@ -8,6 +8,76 @@ import (
 	"strings"
 )
 
+type Node struct {
+	value int
+	depth int
+	left  *Node
+	right *Node
+}
+
+type BST struct {
+	root *Node
+}
+
+func (tree *BST) create_node(array [][]int, index int) *Node {
+	if index != -1 {
+		node := &Node{value: array[index][0], depth: 1}
+		node.left = tree.create_node(array, array[index][1]-1)
+		node.right = tree.create_node(array, array[index][2]-1)
+		return node
+	} else {
+		return nil
+	}
+}
+
+func (tree *BST) height() int {
+	var stack []*Node
+	index := -1
+	root := tree.root
+	height := 0
+	cur_depth := 1
+
+	for {
+		if root == nil {
+			if index == -1 {
+				break
+			} else {
+				root = stack[index]
+				stack = stack[:index]
+				index -= 1
+				root.left = nil
+				cur_depth = root.depth
+			}
+		} else {
+
+			if cur_depth > height {
+				height = cur_depth
+			}
+
+			if root.left != nil && root.right != nil {
+				index += 1
+				stack = append(stack, root)
+				root = root.left
+				root.depth += cur_depth
+				cur_depth += 1
+			} else {
+				if root.left != nil {
+					root = root.left
+					root.depth += cur_depth
+					cur_depth += 1
+				} else if root.right != nil {
+					root = root.right
+					root.depth += cur_depth
+					cur_depth += 1
+				} else {
+					root = nil
+				}
+			}
+		}
+	}
+	return height
+}
+
 func main() {
 	fin, _ := os.Open("height.in")
 	scanner := bufio.NewScanner(fin)
@@ -16,38 +86,25 @@ func main() {
 	n, _ := strconv.Atoi(scanner.Text())
 	array := make([][]int, n)
 
-	for index := 0; index < n; index++ {
-		scanner.Scan()
-		elems := strings.Fields(scanner.Text())
-		arr := make([]int, 4)
-		for i := 0; i < 4; i++ {
-			if i != 3 {
-				arr[i], _ = strconv.Atoi(elems[i])
-			} else {
-				arr[i] = 1
-			}
-		}
-		array[index] = arr
-	}
-
-	len := 0
+	tree := &BST{}
 
 	for i := 0; i < n; i++ {
-		elem := array[i]
-		if elem[1] != 0 {
-			array[elem[1]-1][3] += elem[3]
+		scanner.Scan()
+		elems := strings.Fields(scanner.Text())
+		arr := make([]int, 3)
+		for j := 0; j < 3; j++ {
+			arr[j], _ = strconv.Atoi(elems[j])
 		}
+		array[i] = arr
+	}
 
-		if elem[2] != 0 {
-			array[elem[2]-1][3] += elem[3]
-		}
-
-		if elem[3] > len {
-			len = elem[3]
-		}
+	if len(array) != 0 {
+		tree.root = &Node{value: array[0][0], depth: 1}
+		tree.root.left = tree.create_node(array, array[0][1]-1)
+		tree.root.right = tree.create_node(array, array[0][2]-1)
 	}
 
 	fout, _ := os.Create("height.out")
-	fout.WriteString(fmt.Sprint(len))
+	fout.WriteString(fmt.Sprint(tree.height()))
 	fout.Close()
 }
