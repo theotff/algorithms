@@ -31,7 +31,7 @@ func (tree *BST) create_node(array [][]int, index int) *Node {
 }
 
 func (tree *BST) height() int {
-	var stack []*Node
+	var stack [200000]*Node
 	index := -1
 	root := tree.root
 	height := 0
@@ -43,7 +43,6 @@ func (tree *BST) height() int {
 				break
 			} else {
 				root = stack[index]
-				stack = stack[:index]
 				index -= 1
 				root.left = nil
 				cur_depth = root.depth
@@ -56,7 +55,7 @@ func (tree *BST) height() int {
 
 			if root.left != nil && root.right != nil {
 				index += 1
-				stack = append(stack, root)
+				stack[index] = root
 				root = root.left
 				root.depth += cur_depth
 				cur_depth += 1
