@@ -19,7 +19,7 @@ type LinkedList struct {
 	first *Node
 }
 
-func (queue *LinkedList) queue_put(value int) {
+func (queue *LinkedList) queuePut(value int) {
 	if queue.last == nil {
 		node := &Node{value: value, next: nil}
 		queue.first = node
@@ -31,20 +31,20 @@ func (queue *LinkedList) queue_put(value int) {
 	}
 }
 
-func (queue *LinkedList) queue_get() int {
+func (queue *LinkedList) queueGet() int {
 	value := queue.last.value
 	queue.last = queue.last.next
 	return value
 }
 
-func (list *LinkedList) hash_put(key string, index int) {
-	if list.hash_get(key) == nil {
+func (list *LinkedList) hashPut(key string, index int) {
+	if list.hashGet(key) == nil {
 		node := &Node{key: key, value: index, next: list.last}
 		list.last = node
 	}
 }
 
-func (list *LinkedList) hash_get(key string) *Node {
+func (list *LinkedList) hashGet(key string) *Node {
 	node := list.last
 	for node != nil {
 		if node.key == key {
@@ -77,11 +77,11 @@ func main() {
 	ln := len(callstack)
 	var results []string
 
-	find_func_index := func(label string) (label_index int) {
+	findFuncIndex := func(label string) (label_index int) {
 		for index, elem := range callstack {
 			if strings.HasPrefix(elem, ":") && len(elem) > 1 {
 				if elem[1:] == label {
-					table[hash(label, mod)].hash_put(label, index)
+					table[hash(label, mod)].hashPut(label, index)
 					return index
 				}
 			}
@@ -93,28 +93,28 @@ func main() {
 		op := callstack[index]
 		switch {
 		case op == "+":
-			value := queue.queue_get() + queue.queue_get()
-			queue.queue_put(value % intsize)
+			value := queue.queueGet() + queue.queueGet()
+			queue.queuePut(value % intsize)
 			index += 1
 
 		case op == "-":
-			value := queue.queue_get() - queue.queue_get()
+			value := queue.queueGet() - queue.queueGet()
 
 			if value < 0 {
 				value = intsize + value
 			}
 
-			queue.queue_put(value % intsize)
+			queue.queuePut(value % intsize)
 			index += 1
 
 		case op == "*":
-			value := queue.queue_get() * queue.queue_get()
-			queue.queue_put(value % intsize)
+			value := queue.queueGet() * queue.queueGet()
+			queue.queuePut(value % intsize)
 			index += 1
 
 		case op == "/":
-			x := queue.queue_get()
-			y := queue.queue_get()
+			x := queue.queueGet()
+			y := queue.queueGet()
 			var value int
 
 			if y != 0 {
@@ -123,12 +123,12 @@ func main() {
 				value = 0
 			}
 
-			queue.queue_put(value % intsize)
+			queue.queuePut(value % intsize)
 			index += 1
 
 		case op == "%":
-			x := queue.queue_get()
-			y := queue.queue_get()
+			x := queue.queueGet()
+			y := queue.queueGet()
 			var value int
 
 			if y != 0 {
@@ -137,15 +137,15 @@ func main() {
 				value = 0
 			}
 
-			queue.queue_put(value % intsize)
+			queue.queuePut(value % intsize)
 			index += 1
 
 		case op == "P":
-			results = append(results, fmt.Sprint(queue.queue_get()), "\n")
+			results = append(results, fmt.Sprint(queue.queueGet()), "\n")
 			index += 1
 
 		case op == "C":
-			results = append(results, string(rune(queue.queue_get()%256)))
+			results = append(results, string(rune(queue.queueGet()%256)))
 			index += 1
 
 		case op == "Q":
@@ -153,12 +153,12 @@ func main() {
 
 		case strings.HasPrefix(op, "<"):
 			reg_index := int([]rune(strings.ToLower(op[1:]))[0]) - 97
-			queue.queue_put(registers[reg_index])
+			queue.queuePut(registers[reg_index])
 			index += 1
 
 		case strings.HasPrefix(op, ">"):
 			reg_index := int([]rune(strings.ToLower(op[1:]))[0]) - 97
-			registers[reg_index] = queue.queue_get()
+			registers[reg_index] = queue.queueGet()
 			index += 1
 
 		case strings.HasPrefix(op, "P"):
@@ -173,18 +173,18 @@ func main() {
 
 		case strings.HasPrefix(op, ":"):
 			key := op[1:]
-			table[hash(key, mod)].hash_put(key, index)
+			table[hash(key, mod)].hashPut(key, index)
 			index += 1
 
 		case strings.HasPrefix(op, "J"):
 			key := op[1:]
-			label_node := table[hash(key, mod)].hash_get(key)
+			label_node := table[hash(key, mod)].hashGet(key)
 			var label_index int
 
 			if label_node != nil {
 				label_index = label_node.value
 			} else {
-				label_index = find_func_index(key)
+				label_index = findFuncIndex(key)
 			}
 			index = label_index + 1
 
@@ -193,13 +193,13 @@ func main() {
 
 			if registers[reg_index] == 0 {
 				label := op[2:]
-				label_node := table[hash(label, mod)].hash_get(label)
+				label_node := table[hash(label, mod)].hashGet(label)
 				var label_index int
 
 				if label_node != nil {
 					label_index = label_node.value
 				} else {
-					label_index = find_func_index(label)
+					label_index = findFuncIndex(label)
 				}
 				index = label_index
 			}
@@ -211,13 +211,13 @@ func main() {
 
 			if registers[reg_index_1] == registers[reg_index_2] {
 				label := op[3:]
-				label_node := table[hash(label, mod)].hash_get(label)
+				label_node := table[hash(label, mod)].hashGet(label)
 				var label_index int
 
 				if label_node != nil {
 					label_index = label_node.value
 				} else {
-					label_index = find_func_index(label)
+					label_index = findFuncIndex(label)
 				}
 				index = label_index
 			}
@@ -229,13 +229,13 @@ func main() {
 
 			if registers[reg_index_1] > registers[reg_index_2] {
 				label := op[3:]
-				label_node := table[hash(label, mod)].hash_get(label)
+				label_node := table[hash(label, mod)].hashGet(label)
 				var label_index int
 
 				if label_node != nil {
 					label_index = label_node.value
 				} else {
-					label_index = find_func_index(label)
+					label_index = findFuncIndex(label)
 				}
 				index = label_index
 			}
@@ -244,7 +244,7 @@ func main() {
 		default:
 			num, err := strconv.Atoi(op)
 			if err == nil {
-				queue.queue_put(num % intsize)
+				queue.queuePut(num % intsize)
 			}
 			index += 1
 		}
