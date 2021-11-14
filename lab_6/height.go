@@ -31,54 +31,22 @@ func (tree *BST) createNode(array [][]int, index int) *Node {
 	}
 }
 
-func (tree *BST) height() int {
-	var stack [200000]*Node
-	index := -1
-	root := tree.root
-	height := 0
-	curDepth := 1
+func (tree *BST) height(root *Node) int {
+	if root != nil {
+		var height int
+		rHeight := tree.height(root.right)
+		lHeight := tree.height(root.left)
 
-	for {
-		if root == nil {
-			if index == -1 {
-				break
-			} else {
-				root = stack[index]
-				index -= 1
-				root.left = nil
-				curDepth = root.depth
-			}
-
+		if rHeight > lHeight {
+			height = rHeight
 		} else {
-
-			if curDepth > height {
-				height = curDepth
-			}
-
-			if root.left != nil && root.right != nil {
-				index += 1
-				stack[index] = root
-				root = root.left
-				root.depth += curDepth
-				curDepth += 1
-
-			} else {
-				if root.left != nil {
-					root = root.left
-					root.depth += curDepth
-					curDepth += 1
-				} else if root.right != nil {
-					root = root.right
-					root.depth += curDepth
-					curDepth += 1
-				} else {
-					root = nil
-				}
-			}
+			height = lHeight
 		}
-	}
 
-	return height
+		return height + 1
+	} else {
+		return 0
+	}
 }
 
 func main() {
@@ -108,6 +76,6 @@ func main() {
 	}
 
 	fout, _ := os.Create("height.out")
-	fout.WriteString(fmt.Sprint(tree.height()))
+	fout.WriteString(fmt.Sprint(tree.height(tree.root)))
 	fout.Close()
 }
