@@ -19,6 +19,7 @@ func (list *LinkedList) insert(data string) {
 	if list.last == nil {
 		node := &Node{data: data}
 		list.last = node
+
 	} else {
 		if list.last.data == "(" && data == ")" {
 			list.last = list.last.next
@@ -33,7 +34,7 @@ func (list *LinkedList) insert(data string) {
 	}
 }
 
-func (list *LinkedList) check_state() bool {
+func (list *LinkedList) checkState() bool {
 	if list.last == nil {
 		return true
 	} else {
@@ -54,7 +55,7 @@ func main() {
 			list.insert(elem)
 		}
 
-		if list.check_state() {
+		if list.checkState() {
 			results = append(results, "YES")
 		} else {
 			results = append(results, "NO")

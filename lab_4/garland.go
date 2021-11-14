@@ -16,10 +16,11 @@ func search(left float64, right float64, a float64, n int) float64 {
 	min := a
 
 	for i := 2; i < n; i++ {
-		new_elem := 2*array[i-1] + 2 - array[i-2]
-		array[i] = new_elem
-		if new_elem < min {
-			min = new_elem
+		newElem := 2*array[i-1] + 2 - array[i-2]
+		array[i] = newElem
+
+		if newElem < min {
+			min = newElem
 		}
 	}
 
@@ -35,13 +36,13 @@ func search(left float64, right float64, a float64, n int) float64 {
 func main() {
 	var n int
 	data, _ := ioutil.ReadFile("garland.in")
-	number_strings := strings.Fields(string(data))
-	fmt.Sscanf(number_strings[0], "%d", &n)
-	a, _ := strconv.ParseFloat(number_strings[1], 64)
+	numberStrings := strings.Fields(string(data))
+	fmt.Sscanf(numberStrings[0], "%d", &n)
+	a, _ := strconv.ParseFloat(numberStrings[1], 64)
 	result := search(0, a, a, n)
 
 	fout, _ := os.Create("garland.out")
-	result_string := fmt.Sprintf("%.2f", result)
-	fout.WriteString(result_string)
+	resultString := fmt.Sprintf("%.2f", result)
+	fout.WriteString(resultString)
 	fout.Close()
 }

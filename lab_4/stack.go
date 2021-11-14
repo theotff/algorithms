@@ -38,8 +38,10 @@ func main() {
 
 	for scanner.Scan() {
 		operation := scanner.Text()
+
 		if len(operation) == 1 {
 			results = append(results, list.remove())
+
 		} else {
 			var num int
 			fmt.Sscanf(operation, "+ %d", &num)
@@ -47,13 +49,13 @@ func main() {
 		}
 	}
 
-	result_arr := make([]string, len(results))
+	resultArr := make([]string, len(results))
 
 	for i := 0; i < len(results); i++ {
-		result_arr[i] = fmt.Sprint(results[i])
+		resultArr[i] = fmt.Sprint(results[i])
 	}
 
 	fout, _ := os.Create("stack.out")
-	fout.WriteString(strings.Join(result_arr, "\n"))
+	fout.WriteString(strings.Join(resultArr, "\n"))
 	fout.Close()
 }
