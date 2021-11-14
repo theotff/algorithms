@@ -28,17 +28,17 @@ func (list *LinkedList) insert(val int) {
 func (list *LinkedList) delete(val int) {
 	node := list.last
 	for node != nil {
-		if node.next != nil {
-			if node.next.data == val {
-				if node.next.next != nil {
-					node.next = node.next.next
-				} else {
-					node.next = nil
-				}
-				return
+		if node.next != nil && node.next.data == val {
+			if node.next.next != nil {
+				node.next = node.next.next
 			} else {
-				node = node.next
+				node.next = nil
 			}
+			return
+
+		} else if node.next != nil && node.next.data != val {
+			node = node.next
+
 		} else {
 			if node.data == val {
 				list.last = nil
@@ -50,6 +50,7 @@ func (list *LinkedList) delete(val int) {
 
 func (list *LinkedList) exists(val int) bool {
 	node := list.last
+
 	for node != nil {
 		if node.data == val {
 			return true
@@ -93,12 +94,12 @@ func main() {
 			results = append(results, table[hash(n, mod)].exists(n))
 		}
 	}
-	str_results := make([]string, len(results))
+	strResults := make([]string, len(results))
 	for index, elem := range results {
-		str_results[index] = strconv.FormatBool(elem)
+		strResults[index] = strconv.FormatBool(elem)
 	}
 
 	fout, _ := os.Create("set.out")
-	fout.WriteString(strings.Join(str_results, "\n"))
+	fout.WriteString(strings.Join(strResults, "\n"))
 	fout.Close()
 }

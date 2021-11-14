@@ -24,8 +24,10 @@ type LinkedList struct {
 
 func (list *LinkedList) insert(key string, value string) {
 	qnode := list.last
+
 	for qnode != nil {
 		if qnode.key == key {
+
 			if qnode.last != nil {
 				elem := &Node{key: value, next: qnode.last}
 				qnode.last = elem
@@ -34,43 +36,48 @@ func (list *LinkedList) insert(key string, value string) {
 				qnode.last = elem
 			}
 			return
+
 		} else {
 			qnode = qnode.next
 		}
 	}
+
 	elem := &Node{key: value, next: nil}
 	node := &ListNode{key: key, last: elem, next: list.last}
 	list.last = node
 }
 
 func (list *LinkedList) get(key string) *ListNode {
-	list_node := list.last
-	for list_node != nil {
-		if list_node.key == key {
-			return list_node
+	listNode := list.last
+
+	for listNode != nil {
+		if listNode.key == key {
+			return listNode
 		} else {
-			list_node = list_node.next
+			listNode = listNode.next
 		}
 	}
+
 	return nil
 }
 
 func (list *LinkedList) delete(key string, value string) {
-	list_node := list.get(key)
-	if list_node != nil {
-		node := list_node.last
+	listNode := list.get(key)
+
+	if listNode != nil {
+		node := listNode.last
 		for node != nil {
-			if node.next != nil {
-				if node.next.key == value {
-					if node.next.next != nil {
-						node.next = node.next.next
-					} else {
-						node.next = nil
-					}
-					return
+			if node.next != nil && node.next.key == value {
+				if node.next.next != nil {
+					node.next = node.next.next
 				} else {
-					node = node.next
+					node.next = nil
 				}
+				return
+
+			} else if node.next != nil && node.next.key != value {
+				node = node.next
+
 			} else {
 				if node.key == value {
 					list.last = nil
@@ -81,7 +88,7 @@ func (list *LinkedList) delete(key string, value string) {
 	}
 }
 
-func (list *LinkedList) deleteall(key string) {
+func (list *LinkedList) deleteAll(key string) {
 	node := list.last
 	for node != nil {
 		if node.next != nil {
@@ -154,7 +161,7 @@ func main() {
 
 		case strings.HasPrefix(txt, "deleteall"):
 			key := strings.Fields(txt)[1]
-			table[hash(key, mod)].deleteall(key)
+			table[hash(key, mod)].deleteAll(key)
 		}
 	}
 	fout, _ := os.Create("multimap.out")

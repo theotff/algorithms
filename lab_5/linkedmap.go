@@ -7,11 +7,11 @@ import (
 )
 
 type Node struct {
-	key      string
-	value    string
-	next     *Node
-	prev_ins *Node
-	next_ins *Node
+	key     string
+	value   string
+	next    *Node
+	prevIns *Node
+	nextIns *Node
 }
 
 type LinkedList struct {
@@ -20,15 +20,17 @@ type LinkedList struct {
 
 func (list *LinkedList) insert(key string, value string, prev *Node) *Node {
 	result := list.get(key)
+
 	if result == nil {
 		node := &Node{
-			key:      key,
-			value:    value,
-			next:     list.last,
-			prev_ins: prev}
+			key:     key,
+			value:   value,
+			next:    list.last,
+			prevIns: prev}
 
 		list.last = node
 		return node
+
 	} else {
 		return result
 	}
@@ -36,49 +38,56 @@ func (list *LinkedList) insert(key string, value string, prev *Node) *Node {
 
 func (list *LinkedList) get(key string) *Node {
 	node := list.last
+
 	for node != nil {
 		if node.key == key {
 			return node
+
 		} else {
 			node = node.next
 		}
 	}
+
 	return nil
 }
 
 func (list *LinkedList) delete(key string) {
 	node := list.last
+
 	for node != nil {
-		if node.next != nil {
-			if node.next.key == key {
-				if node.next.next != nil {
-					swap_links(node)
-					node.next = node.next.next
-				} else {
-					swap_links(node)
-					node.next = nil
-				}
-				return
+		if node.next != nil && node.next.key == key {
+			if node.next.next != nil {
+				swapLinks(node)
+				node.next = node.next.next
 			} else {
-				node = node.next
+				swapLinks(node)
+				node.next = nil
 			}
+			return
+
+		} else if node.next != nil && node.next.key != key {
+			node = node.next
+
 		} else {
 			if node.key == key {
-				swap_links(node)
+				swapLinks(node)
 				list.last = nil
 			}
+
 			return
 		}
 	}
 }
 
-func swap_links(node *Node) {
-	if node.prev_ins != nil && node.next_ins != nil {
-		node.prev_ins.next_ins, node.next_ins.prev_ins = node.next_ins, node.prev_ins
-	} else if node.prev_ins != nil && node.next_ins == nil {
-		node.prev_ins.next_ins = nil
-	} else if node.prev_ins == nil && node.next_ins != nil {
-		node.next_ins.prev_ins = nil
+func swapLinks(node *Node) {
+	if node.prevIns != nil && node.nextIns != nil {
+		node.prevIns.nextIns, node.nextIns.prevIns = node.nextIns, node.prevIns
+
+	} else if node.prevIns != nil && node.nextIns == nil {
+		node.prevIns.nextIns = nil
+
+	} else if node.prevIns == nil && node.nextIns != nil {
+		node.nextIns.prevIns = nil
 	}
 }
 
@@ -110,7 +119,7 @@ func main() {
 			node := table[hash(key, mod)].insert(key, value, insert)
 
 			if insert != nil {
-				insert.next_ins = node
+				insert.nextIns = node
 			}
 
 			insert = node
@@ -131,12 +140,12 @@ func main() {
 
 		case strings.HasPrefix(txt, "prev"):
 			key := strings.Fields(txt)[1]
-			hash_val := hash(key, mod)
-			result := table[hash_val].get(key)
+			hashVal := hash(key, mod)
+			result := table[hashVal].get(key)
 
 			if result != nil {
-				if result.prev_ins != nil {
-					results = append(results, result.prev_ins.value)
+				if result.prevIns != nil {
+					results = append(results, result.prevIns.value)
 				} else {
 					results = append(results, "none")
 				}
@@ -146,12 +155,12 @@ func main() {
 
 		case strings.HasPrefix(txt, "next"):
 			key := strings.Fields(txt)[1]
-			hash_val := hash(key, mod)
-			result := table[hash_val].get(key)
+			hashVal := hash(key, mod)
+			result := table[hashVal].get(key)
 
 			if result != nil {
-				if result.next_ins != nil {
-					results = append(results, result.next_ins.value)
+				if result.nextIns != nil {
+					results = append(results, result.nextIns.value)
 				} else {
 					results = append(results, "none")
 				}

@@ -25,30 +25,33 @@ func (list *LinkedList) insert(key string, value string) {
 
 func (list *LinkedList) get(key string) string {
 	node := list.last
+
 	for node != nil {
 		if node.key == key {
 			return node.value
+
 		} else {
 			node = node.next
 		}
 	}
+
 	return "none"
 }
 
 func (list *LinkedList) delete(key string) {
 	node := list.last
 	for node != nil {
-		if node.next != nil {
-			if node.next.key == key {
-				if node.next.next != nil {
-					node.next = node.next.next
-				} else {
-					node.next = nil
-				}
-				return
+		if node.next != nil && node.next.key == key {
+			if node.next.next != nil {
+				node.next = node.next.next
 			} else {
-				node = node.next
+				node.next = nil
 			}
+			return
+
+		} else if node.next != nil && node.next.key != key {
+			node = node.next
+
 		} else {
 			if node.key == key {
 				list.last = nil
@@ -92,6 +95,7 @@ func main() {
 			table[hash(key, mod)].delete(key)
 		}
 	}
+
 	fout, _ := os.Create("map.out")
 	fout.WriteString(strings.Join(results, "\n"))
 	fout.Close()
