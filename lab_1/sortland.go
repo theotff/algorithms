@@ -9,24 +9,24 @@ import (
 )
 
 func index(array []float64, n float64) int {
-	elem_index := 0
+	elemIndex := 0
 	for index, elem := range array {
 		if elem == n {
-			elem_index = index
+			elemIndex = index
 			break
 		}
 	}
-	return elem_index
+	return elemIndex
 }
 
 func main() {
-	data_raw, _ := ioutil.ReadFile("sortland.in")
-	data := strings.Split(string(data_raw), "\n")
+	dataRaw, _ := ioutil.ReadFile("sortland.in")
+	data := strings.Split(string(dataRaw), "\n")
 	people, _ := strconv.Atoi(data[0])
-	numbers_raw := strings.Split(data[1], " ")
+	numbersRaw := strings.Split(data[1], " ")
 	numbers := make([]float64, people)
 
-	for index, elem := range numbers_raw {
+	for index, elem := range numbersRaw {
 		numbers[index], _ = strconv.ParseFloat(elem, 64)
 	}
 

@@ -9,8 +9,8 @@ import (
 )
 
 func main() {
-	data_raw, _ := ioutil.ReadFile("turtle.in")
-	data := strings.Split(string(data_raw), "\n")
+	dataRaw, _ := ioutil.ReadFile("turtle.in")
+	data := strings.Split(string(dataRaw), "\n")
 	var h, w int
 	fmt.Sscanf(data[0], "%d %d", &h, &w)
 	var matrix [][]int

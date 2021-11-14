@@ -9,13 +9,13 @@ import (
 )
 
 func main() {
-	data_raw, _ := ioutil.ReadFile("smallsort.in")
-	data := strings.Split(string(data_raw), "\n")
+	dataRaw, _ := ioutil.ReadFile("smallsort.in")
+	data := strings.Split(string(dataRaw), "\n")
 	n, _ := strconv.Atoi(data[0])
-	numbers_raw := strings.Split(data[1], " ")
+	numbersRaw := strings.Split(data[1], " ")
 	numbers := make([]int, n)
 
-	for index, elem := range numbers_raw {
+	for index, elem := range numbersRaw {
 		numbers[index], _ = strconv.Atoi(elem)
 	}
 
