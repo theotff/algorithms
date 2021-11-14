@@ -19,12 +19,13 @@ type BST struct {
 	root *Node
 }
 
-func (tree *BST) create_node(array [][]int, index int) *Node {
+func (tree *BST) createNode(array [][]int, index int) *Node {
 	if index != -1 {
 		node := &Node{value: array[index][0], depth: 1}
-		node.left = tree.create_node(array, array[index][1]-1)
-		node.right = tree.create_node(array, array[index][2]-1)
+		node.left = tree.createNode(array, array[index][1]-1)
+		node.right = tree.createNode(array, array[index][2]-1)
 		return node
+
 	} else {
 		return nil
 	}
@@ -35,7 +36,7 @@ func (tree *BST) height() int {
 	index := -1
 	root := tree.root
 	height := 0
-	cur_depth := 1
+	curDepth := 1
 
 	for {
 		if root == nil {
@@ -45,35 +46,38 @@ func (tree *BST) height() int {
 				root = stack[index]
 				index -= 1
 				root.left = nil
-				cur_depth = root.depth
+				curDepth = root.depth
 			}
+
 		} else {
 
-			if cur_depth > height {
-				height = cur_depth
+			if curDepth > height {
+				height = curDepth
 			}
 
 			if root.left != nil && root.right != nil {
 				index += 1
 				stack[index] = root
 				root = root.left
-				root.depth += cur_depth
-				cur_depth += 1
+				root.depth += curDepth
+				curDepth += 1
+
 			} else {
 				if root.left != nil {
 					root = root.left
-					root.depth += cur_depth
-					cur_depth += 1
+					root.depth += curDepth
+					curDepth += 1
 				} else if root.right != nil {
 					root = root.right
-					root.depth += cur_depth
-					cur_depth += 1
+					root.depth += curDepth
+					curDepth += 1
 				} else {
 					root = nil
 				}
 			}
 		}
 	}
+
 	return height
 }
 
@@ -99,8 +103,8 @@ func main() {
 
 	if len(array) != 0 {
 		tree.root = &Node{value: array[0][0], depth: 1}
-		tree.root.left = tree.create_node(array, array[0][1]-1)
-		tree.root.right = tree.create_node(array, array[0][2]-1)
+		tree.root.left = tree.createNode(array, array[0][1]-1)
+		tree.root.right = tree.createNode(array, array[0][2]-1)
 	}
 
 	fout, _ := os.Create("height.out")
