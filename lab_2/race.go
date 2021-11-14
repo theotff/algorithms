@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func quicksort(array [][]string) [][]string {
+func quickSort(array [][]string) [][]string {
 	n := len(array)
 	if n < 2 {
 		return array
@@ -34,16 +34,16 @@ func quicksort(array [][]string) [][]string {
 			}
 		}
 
-		result := append(quicksort(less), pivot)
-		result = append(result, quicksort(greater)...)
+		result := append(quickSort(less), pivot)
+		result = append(result, quickSort(greater)...)
 		return result
 	}
 }
 
 func main() {
 	var n int
-	data_raw, _ := ioutil.ReadFile("race.in")
-	data := strings.Split(string(data_raw), "\n")
+	dataRaw, _ := ioutil.ReadFile("race.in")
+	data := strings.Split(string(dataRaw), "\n")
 	fmt.Sscanf(data[0], "%d", &n)
 	array := make([][]string, n)
 
@@ -51,8 +51,8 @@ func main() {
 		array[i-1] = (strings.Split(data[i], " "))
 	}
 
-	result := quicksort(array)
-	var result_final []string
+	result := quickSort(array)
+	var resultFinal []string
 
 	country := ""
 	var names []string
@@ -60,7 +60,7 @@ func main() {
 	for i := 0; i < n; i++ {
 		if country != result[i][0] {
 			if country != "" {
-				result_final = append(result_final, "=== "+country+" ==="+"\n"+strings.Join(names, "\n"))
+				resultFinal = append(resultFinal, "=== "+country+" ==="+"\n"+strings.Join(names, "\n"))
 			}
 			country = result[i][0]
 			names = nil
@@ -68,10 +68,10 @@ func main() {
 		names = append(names, result[i][1])
 	}
 	if country != "" {
-		result_final = append(result_final, "=== "+country+" ==="+"\n"+strings.Join(names, "\n"))
+		resultFinal = append(resultFinal, "=== "+country+" ==="+"\n"+strings.Join(names, "\n"))
 	}
 
 	fout, _ := os.Create("race.out")
-	fout.WriteString(strings.Join(result_final, "\n"))
+	fout.WriteString(strings.Join(resultFinal, "\n"))
 	fout.Close()
 }

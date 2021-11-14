@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func quicksort(array []int) []int {
+func quickSort(array []int) []int {
 	n := len(array)
 	if n < 2 {
 		return array
@@ -29,8 +29,8 @@ func quicksort(array []int) []int {
 			}
 		}
 
-		result := append(quicksort(less), pivot)
-		result = append(result, quicksort(greater)...)
+		result := append(quickSort(less), pivot)
+		result = append(result, quickSort(greater)...)
 		return result
 	}
 }
@@ -41,20 +41,20 @@ func main() {
 	data := strings.Split(string(data_raw), "\n")
 	fmt.Sscanf(data[0], "%d", &n)
 	array := make([]int, n)
-	numbers_raw := strings.Split(data[1], " ")
+	numbersRaw := strings.Split(data[1], " ")
 
 	for i := 0; i < n; i++ {
-		array[i], _ = strconv.Atoi(numbers_raw[i])
+		array[i], _ = strconv.Atoi(numbersRaw[i])
 	}
 
-	sorted := quicksort(array)
-	result_raw := make([]string, n)
+	sorted := quickSort(array)
+	resultRaw := make([]string, n)
 
 	for i := 0; i < n; i++ {
-		result_raw[i] = fmt.Sprint(sorted[i])
+		resultRaw[i] = fmt.Sprint(sorted[i])
 	}
 
-	result := strings.Join(result_raw, " ")
+	result := strings.Join(resultRaw, " ")
 	fout, _ := os.Create("sort.out")
 	fout.WriteString(result)
 	fout.Close()

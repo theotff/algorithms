@@ -25,14 +25,14 @@ func main() {
 		array[i] = i + 1
 	}
 
-	antisorted := antiqs(array)
-	result_raw := make([]string, n)
+	antiSorted := antiqs(array)
+	resultRaw := make([]string, n)
 
 	for i := 0; i < n; i++ {
-		result_raw[i] = fmt.Sprint(antisorted[i])
+		resultRaw[i] = fmt.Sprint(antiSorted[i])
 	}
 
-	result := strings.Join(result_raw, " ")
+	result := strings.Join(resultRaw, " ")
 	fout, _ := os.Create("antiqs.out")
 	fout.WriteString(result)
 	fout.Close()
