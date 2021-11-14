@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func makeheap(array []int) []int {
+func makeHeap(array []int) []int {
 	n := len(array)
 	for i := 0; i < n; i++ {
 		index := i
@@ -24,7 +24,7 @@ func makeheap(array []int) []int {
 	return array
 }
 
-func heapsort(array []int) []int {
+func heapSort(array []int) []int {
 	for count := len(array) - 1; count > 0; count-- {
 		array[0], array[count] = array[count], array[0]
 
@@ -44,14 +44,14 @@ func heapsort(array []int) []int {
 				break
 			}
 
-			var swap_child int
+			var swapChild int
 			if array[child1] > array[child2] {
-				swap_child = child1
+				swapChild = child1
 			} else {
-				swap_child = child2
+				swapChild = child2
 			}
-			array[index], array[swap_child] = array[swap_child], array[index]
-			index = swap_child
+			array[index], array[swapChild] = array[swapChild], array[index]
+			index = swapChild
 		}
 	}
 	return array
@@ -59,22 +59,22 @@ func heapsort(array []int) []int {
 
 func main() {
 	var n int
-	data_raw, _ := ioutil.ReadFile("sort.in")
-	data := strings.Split(string(data_raw), "\n")
+	dataRaw, _ := ioutil.ReadFile("sort.in")
+	data := strings.Split(string(dataRaw), "\n")
 	fmt.Sscanf(data[0], "%d", &n)
 	array := make([]int, n)
-	numbers_raw := strings.Split(data[1], " ")
+	numbersRaw := strings.Split(data[1], " ")
 	for i := 0; i < n; i++ {
-		array[i], _ = strconv.Atoi(numbers_raw[i])
+		array[i], _ = strconv.Atoi(numbersRaw[i])
 	}
 
-	heap := makeheap(array)
-	sorted := heapsort(heap)
-	result_raw := make([]string, n)
+	heap := makeHeap(array)
+	sorted := heapSort(heap)
+	resultRaw := make([]string, n)
 	for i := 0; i < n; i++ {
-		result_raw[i] = fmt.Sprint(sorted[i])
+		resultRaw[i] = fmt.Sprint(sorted[i])
 	}
-	result := strings.Join(result_raw, " ")
+	result := strings.Join(resultRaw, " ")
 	fout, _ := os.Create("sort.out")
 	fout.WriteString(result)
 	fout.Close()

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func quicksort(array []string, k int) []string {
+func quickSort(array []string, k int) []string {
 	n := len(array)
 	if n < 2 {
 		return array
@@ -32,8 +32,8 @@ func quicksort(array []string, k int) []string {
 				}
 			}
 		}
-		result := append(quicksort(less, k), pivot)
-		result = append(result, quicksort(greater, k)...)
+		result := append(quickSort(less, k), pivot)
+		result = append(result, quickSort(greater, k)...)
 		return result
 	}
 }
@@ -41,7 +41,7 @@ func quicksort(array []string, k int) []string {
 func radixsort(array []string, m int, k int) []string {
 	var result = array
 	for i := 0; i < k; i++ {
-		result = quicksort(result, m-i-1)
+		result = quickSort(result, m-i-1)
 	}
 	return result
 }

@@ -50,7 +50,7 @@ func replace(heap [][]int, n int, m int) [][]int {
 	return heap
 }
 
-func remove_min(heap [][]int) ([][]int, string) {
+func removeMin(heap [][]int) ([][]int, string) {
 	var result string
 	ln := len(heap)
 	if ln < 1 {
@@ -79,14 +79,14 @@ func remove_min(heap [][]int) ([][]int, string) {
 					break
 				}
 
-				var swap_child int
+				var swapChild int
 				if heap[child1][0] < heap[child2][0] {
-					swap_child = child1
+					swapChild = child1
 				} else {
-					swap_child = child2
+					swapChild = child2
 				}
-				heap[index], heap[swap_child] = heap[swap_child], heap[index]
-				index = swap_child
+				heap[index], heap[swapChild] = heap[swapChild], heap[index]
+				index = swapChild
 			}
 		}
 		return heap, result
@@ -118,7 +118,7 @@ func main() {
 
 		case strings.HasPrefix(txt, "extract-min"):
 			var result string
-			heap, result = remove_min(heap)
+			heap, result = removeMin(heap)
 			results = append(results, result)
 		}
 		index += 1

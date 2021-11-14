@@ -27,14 +27,14 @@ func checkheap(array []int) string {
 
 func main() {
 	var n int
-	data_raw, _ := ioutil.ReadFile("isheap.in")
-	data := strings.Split(string(data_raw), "\n")
+	dataRaw, _ := ioutil.ReadFile("isheap.in")
+	data := strings.Split(string(dataRaw), "\n")
 	fmt.Sscanf(data[0], "%d", &n)
 	array := make([]int, n)
-	numbers_raw := strings.Split(data[1], " ")
+	numbersRaw := strings.Split(data[1], " ")
 
 	for i := 0; i < n; i++ {
-		array[i], _ = strconv.Atoi(numbers_raw[i])
+		array[i], _ = strconv.Atoi(numbersRaw[i])
 	}
 
 	fout, _ := os.Create("isheap.out")
