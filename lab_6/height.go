@@ -10,7 +10,6 @@ import (
 
 type Node struct {
 	value int
-	depth int
 	left  *Node
 	right *Node
 }
@@ -21,7 +20,7 @@ type BST struct {
 
 func (tree *BST) createNode(array [][]int, index int) *Node {
 	if index != -1 {
-		node := &Node{value: array[index][0], depth: 1}
+		node := &Node{value: array[index][0]}
 		node.left = tree.createNode(array, array[index][1]-1)
 		node.right = tree.createNode(array, array[index][2]-1)
 		return node
@@ -70,7 +69,7 @@ func main() {
 	}
 
 	if len(array) != 0 {
-		tree.root = &Node{value: array[0][0], depth: 1}
+		tree.root = &Node{value: array[0][0]}
 		tree.root.left = tree.createNode(array, array[0][1]-1)
 		tree.root.right = tree.createNode(array, array[0][2]-1)
 	}
