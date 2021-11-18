@@ -91,13 +91,13 @@ func main() {
 
 	for index < ln {
 		op := callstack[index]
-		switch {
-		case op == "+":
+		switch string(op[0]) {
+		case "+":
 			value := queue.queueGet() + queue.queueGet()
 			queue.queuePut(value % intsize)
 			index += 1
 
-		case op == "-":
+		case "-":
 			value := queue.queueGet() - queue.queueGet()
 
 			if value < 0 {
@@ -107,12 +107,12 @@ func main() {
 			queue.queuePut(value % intsize)
 			index += 1
 
-		case op == "*":
+		case "*":
 			value := queue.queueGet() * queue.queueGet()
 			queue.queuePut(value % intsize)
 			index += 1
 
-		case op == "/":
+		case "/":
 			x := queue.queueGet()
 			y := queue.queueGet()
 			var value int
@@ -126,7 +126,7 @@ func main() {
 			queue.queuePut(value % intsize)
 			index += 1
 
-		case op == "%":
+		case "%":
 			x := queue.queueGet()
 			y := queue.queueGet()
 			var value int
@@ -140,43 +140,45 @@ func main() {
 			queue.queuePut(value % intsize)
 			index += 1
 
-		case op == "P":
-			results = append(results, fmt.Sprint(queue.queueGet()), "\n")
-			index += 1
+		case "P":
+			if len(op) == 1 {
+				results = append(results, fmt.Sprint(queue.queueGet()), "\n")
+				index += 1
+			} else {
+				regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
+				results = append(results, fmt.Sprint(registers[regIndex]), "\n")
+				index += 1
+			}
 
-		case op == "C":
-			results = append(results, string(rune(queue.queueGet()%256)))
-			index += 1
+		case "C":
+			if len(op) == 1 {
+				results = append(results, string(rune(queue.queueGet()%256)))
+				index += 1
+			} else {
+				regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
+				results = append(results, string(rune(registers[regIndex])%256))
+				index += 1
+			}
 
-		case op == "Q":
+		case "Q":
 			index = ln
 
-		case strings.HasPrefix(op, "<"):
+		case "<":
 			regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
 			queue.queuePut(registers[regIndex])
 			index += 1
 
-		case strings.HasPrefix(op, ">"):
+		case ">":
 			regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
 			registers[regIndex] = queue.queueGet()
 			index += 1
 
-		case strings.HasPrefix(op, "P"):
-			regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
-			results = append(results, fmt.Sprint(registers[regIndex]), "\n")
-			index += 1
-
-		case strings.HasPrefix(op, "C"):
-			regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
-			results = append(results, string(rune(registers[regIndex])%256))
-			index += 1
-
-		case strings.HasPrefix(op, ":"):
+		case ":":
 			key := op[1:]
 			table[hash(key, mod)].hashPut(key, index)
 			index += 1
 
-		case strings.HasPrefix(op, "J"):
+		case "J":
 			key := op[1:]
 			labelNode := table[hash(key, mod)].hashGet(key)
 			var labelIndex int
@@ -188,7 +190,7 @@ func main() {
 			}
 			index = labelIndex + 1
 
-		case strings.HasPrefix(op, "Z"):
+		case "Z":
 			regIndex := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
 
 			if registers[regIndex] == 0 {
@@ -205,7 +207,7 @@ func main() {
 			}
 			index += 1
 
-		case strings.HasPrefix(op, "E"):
+		case "E":
 			regIndex1 := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
 			regIndex2 := int([]rune(strings.ToLower(op[2:3]))[0]) - 97
 
@@ -223,7 +225,7 @@ func main() {
 			}
 			index += 1
 
-		case strings.HasPrefix(op, "G"):
+		case "G":
 			regIndex1 := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
 			regIndex2 := int([]rune(strings.ToLower(op[2:3]))[0]) - 97
 
