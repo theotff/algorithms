@@ -77,7 +77,7 @@ func main() {
 	ln := len(callstack)
 	var results []string
 
-	findFuncIndex := func(label string) (label_index int) {
+	findFuncIndex := func(label string) (labelIndex int) {
 		for index, elem := range callstack {
 			if strings.HasPrefix(elem, ":") && len(elem) > 1 {
 				if elem[1:] == label {
@@ -152,23 +152,23 @@ func main() {
 			index = ln
 
 		case strings.HasPrefix(op, "<"):
-			reg_index := int([]rune(strings.ToLower(op[1:]))[0]) - 97
-			queue.queuePut(registers[reg_index])
+			regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
+			queue.queuePut(registers[regIndex])
 			index += 1
 
 		case strings.HasPrefix(op, ">"):
-			reg_index := int([]rune(strings.ToLower(op[1:]))[0]) - 97
-			registers[reg_index] = queue.queueGet()
+			regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
+			registers[regIndex] = queue.queueGet()
 			index += 1
 
 		case strings.HasPrefix(op, "P"):
-			reg_index := int([]rune(strings.ToLower(op[1:]))[0]) - 97
-			results = append(results, fmt.Sprint(registers[reg_index]), "\n")
+			regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
+			results = append(results, fmt.Sprint(registers[regIndex]), "\n")
 			index += 1
 
 		case strings.HasPrefix(op, "C"):
-			reg_index := int([]rune(strings.ToLower(op[1:]))[0]) - 97
-			results = append(results, string(rune(registers[reg_index])%256))
+			regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
+			results = append(results, string(rune(registers[regIndex])%256))
 			index += 1
 
 		case strings.HasPrefix(op, ":"):
@@ -178,66 +178,66 @@ func main() {
 
 		case strings.HasPrefix(op, "J"):
 			key := op[1:]
-			label_node := table[hash(key, mod)].hashGet(key)
-			var label_index int
+			labelNode := table[hash(key, mod)].hashGet(key)
+			var labelIndex int
 
-			if label_node != nil {
-				label_index = label_node.value
+			if labelNode != nil {
+				labelIndex = labelNode.value
 			} else {
-				label_index = findFuncIndex(key)
+				labelIndex = findFuncIndex(key)
 			}
-			index = label_index + 1
+			index = labelIndex + 1
 
 		case strings.HasPrefix(op, "Z"):
-			reg_index := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
+			regIndex := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
 
-			if registers[reg_index] == 0 {
+			if registers[regIndex] == 0 {
 				label := op[2:]
-				label_node := table[hash(label, mod)].hashGet(label)
-				var label_index int
+				labelNode := table[hash(label, mod)].hashGet(label)
+				var labelIndex int
 
-				if label_node != nil {
-					label_index = label_node.value
+				if labelNode != nil {
+					labelIndex = labelNode.value
 				} else {
-					label_index = findFuncIndex(label)
+					labelIndex = findFuncIndex(label)
 				}
-				index = label_index
+				index = labelIndex
 			}
 			index += 1
 
 		case strings.HasPrefix(op, "E"):
-			reg_index_1 := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
-			reg_index_2 := int([]rune(strings.ToLower(op[2:3]))[0]) - 97
+			regIndex1 := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
+			regIndex2 := int([]rune(strings.ToLower(op[2:3]))[0]) - 97
 
-			if registers[reg_index_1] == registers[reg_index_2] {
+			if registers[regIndex1] == registers[regIndex2] {
 				label := op[3:]
-				label_node := table[hash(label, mod)].hashGet(label)
-				var label_index int
+				labelNode := table[hash(label, mod)].hashGet(label)
+				var labelIndex int
 
-				if label_node != nil {
-					label_index = label_node.value
+				if labelNode != nil {
+					labelIndex = labelNode.value
 				} else {
-					label_index = findFuncIndex(label)
+					labelIndex = findFuncIndex(label)
 				}
-				index = label_index
+				index = labelIndex
 			}
 			index += 1
 
 		case strings.HasPrefix(op, "G"):
-			reg_index_1 := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
-			reg_index_2 := int([]rune(strings.ToLower(op[2:3]))[0]) - 97
+			regIndex1 := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
+			regIndex2 := int([]rune(strings.ToLower(op[2:3]))[0]) - 97
 
-			if registers[reg_index_1] > registers[reg_index_2] {
+			if registers[regIndex1] > registers[regIndex2] {
 				label := op[3:]
-				label_node := table[hash(label, mod)].hashGet(label)
-				var label_index int
+				labelNode := table[hash(label, mod)].hashGet(label)
+				var labelIndex int
 
-				if label_node != nil {
-					label_index = label_node.value
+				if labelNode != nil {
+					labelIndex = labelNode.value
 				} else {
-					label_index = findFuncIndex(label)
+					labelIndex = findFuncIndex(label)
 				}
-				index = label_index
+				index = labelIndex
 			}
 			index += 1
 
