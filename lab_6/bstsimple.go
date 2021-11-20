@@ -65,63 +65,69 @@ func (tree *BST) exists(value int) bool {
 	return node != nil
 }
 
+func (tree *BST) deleteLeaf(node *Node) {
+	if node.parent != nil {
+		node.parent.left = nil
+		node.parent.right = nil
+	} else {
+		tree.root = nil
+	}
+}
+
+func (tree *BST) deleteDoubleChildren(node *Node) {
+	successor := tree.next(node.value)
+	node.value = successor.value
+
+	if successor.parent.left == successor {
+		successor.parent.left = successor.right
+		if successor.right != nil {
+			successor.right.parent = successor.parent
+		}
+	} else {
+		successor.parent.right = successor.right
+		if successor.right != nil {
+			successor.right.parent = successor.parent
+		}
+	}
+}
+
+func (tree *BST) deleteSingleChild(node *Node) {
+	if node.right != nil {
+		if node.parent == nil {
+			tree.root = node.right
+			node.right.parent = nil
+		} else if node.parent.left == node {
+			node.parent.left = node.right
+			node.parent.left.parent = node.parent
+		} else {
+			node.parent.right = node.right
+			node.parent.right.parent = node.parent
+		}
+	} else {
+		if node.parent == nil {
+			tree.root = node.left
+			node.left.parent = nil
+		} else if node.parent.left == node {
+			node.parent.left = node.left
+			node.parent.left.parent = node.parent
+		} else {
+			node.parent.right = node.left
+			node.parent.right.parent = node.parent
+		}
+	}
+}
+
 func (tree *BST) delete(value int) {
 	node := tree.search(tree.root, value)
 	if node != nil {
 		if node.right == nil && node.left == nil {
-			if node.parent != nil {
-				if node.parent.left == node {
-					node.parent.left = nil
-				} else {
-					node.parent.right = nil
-				}
-			} else {
-				tree.root = nil
-			}
+			tree.deleteLeaf(node)
+
 		} else if node.right != nil && node.left != nil {
-			successor := tree.next(node.value)
-
-			if successor.left != nil {
-				fmt.Println(tree.root.parent.value)
-			}
-
-			node.value = successor.value
-			if successor.parent.left == successor {
-				successor.parent.left = successor.right
-				if successor.right != nil {
-					successor.right.parent = successor.parent
-				}
-			} else {
-				successor.parent.right = successor.right
-				if successor.right != nil {
-					successor.right.parent = successor.parent
-				}
-			}
+			tree.deleteDoubleChildren(node)
 
 		} else {
-			if node.right != nil {
-				if node.parent == nil {
-					tree.root = node.right
-					node.right.parent = nil
-				} else if node.parent.left == node {
-					node.parent.left = node.right
-					node.parent.left.parent = node.parent
-				} else {
-					node.parent.right = node.right
-					node.parent.right.parent = node.parent
-				}
-			} else {
-				if node.parent == nil {
-					tree.root = node.left
-					node.left.parent = nil
-				} else if node.parent.left == node {
-					node.parent.left = node.left
-					node.parent.left.parent = node.parent
-				} else {
-					node.parent.right = node.left
-					node.parent.right.parent = node.parent
-				}
-			}
+			tree.deleteSingleChild(node)
 		}
 	}
 }
