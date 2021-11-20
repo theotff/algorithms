@@ -20,15 +20,13 @@ type LinkedList struct {
 }
 
 func (queue *LinkedList) queuePut(value int) {
+	node := &Node{value: value, next: nil}
 	if queue.last == nil {
-		node := &Node{value: value, next: nil}
-		queue.first = node
 		queue.last = node
 	} else {
-		node := &Node{value: value, next: nil}
 		queue.first.next = node
-		queue.first = node
 	}
+	queue.first = node
 }
 
 func (queue *LinkedList) queueGet() int {
@@ -64,6 +62,10 @@ func hash(key string, mod int) int {
 	return sum % mod
 }
 
+func asciiIndex(char string) int {
+	return int([]rune(strings.ToLower(char))[0]) - 97
+}
+
 func main() {
 	data, _ := ioutil.ReadFile("quack.in")
 	callstack := strings.Fields(string(data))
@@ -91,6 +93,7 @@ func main() {
 
 	for index < ln {
 		op := callstack[index]
+
 		switch string(op[0]) {
 		case "+":
 			value := queue.queueGet() + queue.queueGet()
@@ -155,7 +158,7 @@ func main() {
 				results = append(results, string(rune(queue.queueGet()%256)))
 				index += 1
 			} else {
-				regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
+				regIndex := asciiIndex(op[1:])
 				results = append(results, string(rune(registers[regIndex])%256))
 				index += 1
 			}
@@ -164,12 +167,12 @@ func main() {
 			index = ln
 
 		case "<":
-			regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
+			regIndex := asciiIndex(op[1:])
 			queue.queuePut(registers[regIndex])
 			index += 1
 
 		case ">":
-			regIndex := int([]rune(strings.ToLower(op[1:]))[0]) - 97
+			regIndex := asciiIndex(op[1:])
 			registers[regIndex] = queue.queueGet()
 			index += 1
 
@@ -191,7 +194,7 @@ func main() {
 			index = labelIndex + 1
 
 		case "Z":
-			regIndex := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
+			regIndex := asciiIndex(op[1:2])
 
 			if registers[regIndex] == 0 {
 				label := op[2:]
@@ -208,8 +211,8 @@ func main() {
 			index += 1
 
 		case "E":
-			regIndex1 := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
-			regIndex2 := int([]rune(strings.ToLower(op[2:3]))[0]) - 97
+			regIndex1 := asciiIndex(op[1:2])
+			regIndex2 := asciiIndex(op[2:3])
 
 			if registers[regIndex1] == registers[regIndex2] {
 				label := op[3:]
@@ -226,8 +229,8 @@ func main() {
 			index += 1
 
 		case "G":
-			regIndex1 := int([]rune(strings.ToLower(op[1:2]))[0]) - 97
-			regIndex2 := int([]rune(strings.ToLower(op[2:3]))[0]) - 97
+			regIndex1 := asciiIndex(op[1:2])
+			regIndex2 := asciiIndex(op[2:3])
 
 			if registers[regIndex1] > registers[regIndex2] {
 				label := op[3:]
@@ -251,6 +254,7 @@ func main() {
 			index += 1
 		}
 	}
+
 	fout, _ := os.Create("quack.out")
 	fout.WriteString(strings.Join(results, ""))
 	fout.Close()
