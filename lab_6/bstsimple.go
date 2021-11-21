@@ -97,22 +97,22 @@ func (tree *BST) deleteSingleChild(node *Node) {
 			tree.root = node.right
 			node.right.parent = nil
 		} else if node.parent.left == node {
+			node.right.parent = node.parent
 			node.parent.left = node.right
-			node.parent.left.parent = node.parent
 		} else {
+			node.right.parent = node.parent
 			node.parent.right = node.right
-			node.parent.right.parent = node.parent
 		}
 	} else {
 		if node.parent == nil {
 			tree.root = node.left
 			node.left.parent = nil
 		} else if node.parent.left == node {
+			node.left.parent = node.parent
 			node.parent.left = node.left
-			node.parent.left.parent = node.parent
 		} else {
+			node.left.parent = node.parent
 			node.parent.right = node.left
-			node.parent.right.parent = node.parent
 		}
 	}
 }

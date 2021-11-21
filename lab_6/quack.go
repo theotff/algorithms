@@ -176,8 +176,7 @@ func main() {
 		case "J":
 			key := op[1:]
 			labelNode := table[hash(key, mod)].hashGet(key)
-			labelIndex := labelNode.value
-			index = labelIndex + 1
+			index = labelNode.value + 1
 
 		case "Z":
 			regIndex := asciiIndex(op[1:2])
@@ -185,8 +184,7 @@ func main() {
 			if registers[regIndex] == 0 {
 				label := op[2:]
 				labelNode := table[hash(label, mod)].hashGet(label)
-				labelIndex := labelNode.value
-				index = labelIndex
+				index = labelNode.value
 			}
 			index += 1
 
@@ -197,8 +195,7 @@ func main() {
 			if registers[regIndex1] == registers[regIndex2] {
 				label := op[3:]
 				labelNode := table[hash(label, mod)].hashGet(label)
-				labelIndex := labelNode.value
-				index = labelIndex
+				index = labelNode.value
 			}
 			index += 1
 
@@ -209,8 +206,7 @@ func main() {
 			if registers[regIndex1] > registers[regIndex2] {
 				label := op[3:]
 				labelNode := table[hash(label, mod)].hashGet(label)
-				labelIndex := labelNode.value
-				index = labelIndex
+				index = labelNode.value
 			}
 			index += 1
 
