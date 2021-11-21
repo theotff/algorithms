@@ -79,16 +79,10 @@ func main() {
 	ln := len(callstack)
 	var results []string
 
-	findFuncIndex := func(label string) (labelIndex int) {
-		for index, elem := range callstack {
-			if strings.HasPrefix(elem, ":") && len(elem) > 1 {
-				if elem[1:] == label {
-					table[hash(label, mod)].hashPut(label, index)
-					return index
-				}
-			}
+	for index, elem := range callstack {
+		if string(elem[0]) == ":" {
+			table[hash(string(elem[1:]), mod)].hashPut(string(elem[1:]), index)
 		}
-		return
 	}
 
 	for index < ln {
@@ -177,20 +171,12 @@ func main() {
 			index += 1
 
 		case ":":
-			key := op[1:]
-			table[hash(key, mod)].hashPut(key, index)
 			index += 1
 
 		case "J":
 			key := op[1:]
 			labelNode := table[hash(key, mod)].hashGet(key)
-			var labelIndex int
-
-			if labelNode != nil {
-				labelIndex = labelNode.value
-			} else {
-				labelIndex = findFuncIndex(key)
-			}
+			labelIndex := labelNode.value
 			index = labelIndex + 1
 
 		case "Z":
@@ -199,13 +185,7 @@ func main() {
 			if registers[regIndex] == 0 {
 				label := op[2:]
 				labelNode := table[hash(label, mod)].hashGet(label)
-				var labelIndex int
-
-				if labelNode != nil {
-					labelIndex = labelNode.value
-				} else {
-					labelIndex = findFuncIndex(label)
-				}
+				labelIndex := labelNode.value
 				index = labelIndex
 			}
 			index += 1
@@ -217,13 +197,7 @@ func main() {
 			if registers[regIndex1] == registers[regIndex2] {
 				label := op[3:]
 				labelNode := table[hash(label, mod)].hashGet(label)
-				var labelIndex int
-
-				if labelNode != nil {
-					labelIndex = labelNode.value
-				} else {
-					labelIndex = findFuncIndex(label)
-				}
+				labelIndex := labelNode.value
 				index = labelIndex
 			}
 			index += 1
@@ -235,13 +209,7 @@ func main() {
 			if registers[regIndex1] > registers[regIndex2] {
 				label := op[3:]
 				labelNode := table[hash(label, mod)].hashGet(label)
-				var labelIndex int
-
-				if labelNode != nil {
-					labelIndex = labelNode.value
-				} else {
-					labelIndex = findFuncIndex(label)
-				}
+				labelIndex := labelNode.value
 				index = labelIndex
 			}
 			index += 1
