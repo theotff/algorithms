@@ -37,20 +37,15 @@ func (list *LinkedList) insert(key string, value string) {
 }
 
 func (list *LinkedList) delete(key string) {
-	node := list.last
-	for node != nil {
-		if node.key == key {
-			if node.next != nil {
-				node.next.prev = node.prev
-			}
-			if node.prev != nil {
-				node.prev.next = node.next
-			} else {
-				list.last = node.next
-			}
-			return
+	node := list.get(key)
+	if node != nil {
+		if node.next != nil {
+			node.next.prev = node.prev
+		}
+		if node.prev != nil {
+			node.prev.next = node.next
 		} else {
-			node = node.next
+			list.last = node.next
 		}
 	}
 }
@@ -80,7 +75,7 @@ func main() {
 	scanner := bufio.NewScanner(fin)
 	scanner.Split(bufio.ScanLines)
 
-	mod := 10000
+	mod := 1000
 	table := make([]LinkedList, mod)
 	var results []string
 
@@ -97,6 +92,7 @@ func main() {
 
 		case "get":
 			node := table[hashSum].get(key)
+
 			if node != nil {
 				results = append(results, node.value)
 			} else {
