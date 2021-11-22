@@ -9,21 +9,21 @@ import (
 )
 
 type Node struct {
-	data int
-	next *Node
-	prev *Node
+	value int
+	next  *Node
+	prev  *Node
 }
 
 type LinkedList struct {
 	last *Node
 }
 
-func (list *LinkedList) insert(val int) {
-	if !(list.exists(val)) {
+func (list *LinkedList) insert(value int) {
+	if !(list.exists(value)) {
 		node := &Node{
-			data: val,
-			next: list.last,
-			prev: nil}
+			value: value,
+			next:  list.last,
+			prev:  nil}
 
 		if list.last != nil {
 			list.last.prev = node
@@ -32,40 +32,42 @@ func (list *LinkedList) insert(val int) {
 	}
 }
 
-func (list *LinkedList) delete(val int) {
-	node := list.last
-	for node != nil {
-		if node.data == val {
-			if node.next != nil {
-				node.next.prev = node.prev
-			}
-			if node.prev != nil {
-				node.prev.next = node.next
-			} else {
-				list.last = node.next
-			}
-			return
+func (list *LinkedList) delete(value int) {
+	node := list.get(value)
+	if node != nil {
+		if node.next != nil {
+			node.next.prev = node.prev
+		}
+		if node.prev != nil {
+			node.prev.next = node.next
 		} else {
-			node = node.next
+			list.last = node.next
 		}
 	}
 }
 
-func (list *LinkedList) exists(val int) bool {
+func (list *LinkedList) get(value int) *Node {
 	node := list.last
-
 	for node != nil {
-		if node.data == val {
-			return true
+		if node.value == value {
+			return node
 		} else {
 			node = node.next
 		}
 	}
-	return false
+	return nil
 }
 
-func hash(n int, mod int) int {
-	return int(math.Abs(float64(n % mod)))
+func (list *LinkedList) exists(value int) bool {
+	if list.get(value) != nil {
+		return true
+	} else {
+		return false
+	}
+}
+
+func hash(num int, mod int) int {
+	return int(math.Abs(float64(num % mod)))
 }
 
 func main() {
@@ -80,18 +82,19 @@ func main() {
 	for scanner.Scan() {
 		txt := scanner.Text()
 		fields := strings.Fields(txt)
-		n, _ := strconv.Atoi(fields[1])
-		hashSum := hash(n, mod)
+		num, _ := strconv.Atoi(fields[1])
+		hashSum := hash(num, mod)
 
 		switch fields[0] {
 		case "insert":
-			table[hashSum].insert(n)
+			table[hashSum].insert(num)
 
 		case "delete":
-			table[hashSum].delete(n)
+			table[hashSum].delete(num)
 
 		case "exists":
-			results = append(results, strconv.FormatBool(table[hashSum].exists(n)))
+			exists := table[hashSum].exists(num)
+			results = append(results, strconv.FormatBool(exists))
 		}
 	}
 
