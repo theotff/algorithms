@@ -3,86 +3,95 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strings"
 )
 
-type ListNode struct {
-	key  string
-	last *Node
-	next *ListNode
-}
+const mod = 1000
 
 type Node struct {
-	key  string
-	next *Node
+	key   string
+	value string
+	table []LinkedList
+	prev  *Node
+	next  *Node
 }
 
 type LinkedList struct {
-	last *ListNode
+	last *Node
 }
 
-func (list *LinkedList) insert(key string, value string) {
-	qnode := list.last
+func (list *LinkedList) put(key string, value string) {
+	result := list.get(key)
+	if result == nil {
+		node := &Node{
+			key:  key,
+			next: list.last}
 
-	for qnode != nil {
-		if qnode.key == key {
-
-			if qnode.last != nil {
-				elem := &Node{key: value, next: qnode.last}
-				qnode.last = elem
-			} else {
-				elem := &Node{key: value, next: nil}
-				qnode.last = elem
-			}
-			return
-
-		} else {
-			qnode = qnode.next
+		if list.last != nil {
+			list.last.prev = node
 		}
-	}
+		list.last = node
+		node.table = make([]LinkedList, mod)
 
-	elem := &Node{key: value, next: nil}
-	node := &ListNode{key: key, last: elem, next: list.last}
-	list.last = node
+		result = node
+	}
+	hashSum := hash(value, mod)
+	result.table[hashSum].listPut(value)
 }
 
-func (list *LinkedList) get(key string) *ListNode {
-	listNode := list.last
+func (list *LinkedList) listPut(value string) {
+	result := list.listGet(value)
+	if result == nil {
+		node := &Node{
+			value: value,
+			next:  list.last}
 
-	for listNode != nil {
-		if listNode.key == key {
-			return listNode
+		if list.last != nil {
+			list.last.prev = node
+		}
+		list.last = node
+	}
+}
+
+func (list *LinkedList) listGet(value string) *Node {
+	node := list.last
+	for node != nil {
+		if node.value == value {
+			return node
 		} else {
-			listNode = listNode.next
+			node = node.next
 		}
 	}
+	return nil
+}
 
+func (list *LinkedList) get(key string) *Node {
+	node := list.last
+	for node != nil {
+		if node.key == key {
+			return node
+		} else {
+			node = node.next
+		}
+	}
 	return nil
 }
 
 func (list *LinkedList) delete(key string, value string) {
-	listNode := list.get(key)
-
-	if listNode != nil {
-		node := listNode.last
-		for node != nil {
-			if node.next != nil && node.next.key == value {
-				if node.next.next != nil {
-					node.next = node.next.next
-				} else {
-					node.next = nil
-				}
-				return
-
-			} else if node.next != nil && node.next.key != value {
-				node = node.next
-
+	result := list.get(key)
+	if result != nil {
+		hashSum := hash(value, mod)
+		node := result.table[hashSum].listGet(value)
+		if node != nil {
+			if node.next != nil {
+				node.next.prev = node.prev
+			}
+			if node.prev != nil {
+				node.prev.next = node.next
 			} else {
-				if node.key == value {
-					list.last = nil
-				}
-				return
+				result.table[hashSum].last = node.next
 			}
 		}
 	}
@@ -91,32 +100,28 @@ func (list *LinkedList) delete(key string, value string) {
 func (list *LinkedList) deleteAll(key string) {
 	node := list.last
 	for node != nil {
-		if node.next != nil {
-			if node.next.key == key {
-				if node.next.next != nil {
-					node.next = node.next.next
-				} else {
-					node.next = nil
-				}
-				return
-			} else {
-				node = node.next
+		if node.key == key {
+			if node.next != nil {
+				node.next.prev = node.prev
 			}
-		} else {
-			if node.key == key {
-				list.last = nil
+			if node.prev != nil {
+				node.prev.next = node.next
+			} else {
+				list.last = node.next
 			}
 			return
+		} else {
+			node = node.next
 		}
 	}
 }
 
 func hash(key string, mod int) int {
-	sum := 0
+	hashSum := 5381
 	for _, elem := range key {
-		sum += int(elem)
+		hashSum = ((hashSum << 5) + hashSum) + int(elem)
 	}
-	return sum % mod
+	return int(math.Abs(float64(hashSum % mod)))
 }
 
 func main() {
@@ -124,44 +129,44 @@ func main() {
 	scanner := bufio.NewScanner(fin)
 	scanner.Split(bufio.ScanLines)
 
-	mod := 100
 	table := make([]LinkedList, mod)
 	var results []string
 
 	for scanner.Scan() {
 		txt := scanner.Text()
+		fields := strings.Fields(txt)
+		key := fields[1]
+		hashSum := hash(key, mod)
 
-		switch {
-		case strings.HasPrefix(txt, "put"):
-			fields := strings.Fields(txt)
-			key, value := fields[1], fields[2]
-			table[hash(key, mod)].insert(key, value)
+		switch fields[0] {
+		case "put":
+			value := fields[2]
+			table[hashSum].put(key, value)
 
-		case strings.HasPrefix(txt, "get"):
-			key := strings.Fields(txt)[1]
-			node := table[hash(key, mod)].get(key)
+		case "get":
+			node := table[hashSum].get(key)
 			if node != nil {
 				count := 0
 				var res []string
-				elem := node.last
-				for elem != nil {
-					count += 1
-					res = append(res, elem.key)
-					elem = elem.next
+				for i := 0; i < mod; i++ {
+					elem := node.table[i].last
+					for elem != nil {
+						count += 1
+						res = append(res, elem.value)
+						elem = elem.next
+					}
 				}
 				results = append(results, fmt.Sprint(count)+" "+strings.Join(res, " "))
 			} else {
 				results = append(results, "0")
 			}
 
-		case strings.HasPrefix(txt, "delete "):
-			fields := strings.Fields(txt)
-			key, value := fields[1], fields[2]
-			table[hash(key, mod)].delete(key, value)
+		case "delete":
+			value := fields[2]
+			table[hashSum].delete(key, value)
 
-		case strings.HasPrefix(txt, "deleteall"):
-			key := strings.Fields(txt)[1]
-			table[hash(key, mod)].deleteAll(key)
+		case "deleteall":
+			table[hashSum].deleteAll(key)
 		}
 	}
 	fout, _ := os.Create("multimap.out")
