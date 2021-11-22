@@ -36,9 +36,9 @@ func (list *LinkedList) put(key string, value string, prevIns *Node) *Node {
 		if prevIns != nil {
 			prevIns.nextIns = node
 		}
+
 		list.last = node
 		return node
-
 	} else {
 		result.value = value
 		return prevIns
@@ -46,33 +46,32 @@ func (list *LinkedList) put(key string, value string, prevIns *Node) *Node {
 }
 
 func (list *LinkedList) delete(key string, prevIns *Node) *Node {
-	node := list.last
-	for node != nil {
-		if node.key == key {
-			if node.next != nil {
-				node.next.prev = node.prev
-			}
-			if node.prev != nil {
-				node.prev.next = node.next
-			} else {
-				list.last = node.next
-			}
-
-			if node.prevIns != nil {
-				node.prevIns.nextIns = node.nextIns
-			}
-			if node.nextIns != nil {
-				node.nextIns.prevIns = node.prevIns
-			}
-
-			if node == prevIns {
-				return prevIns.prevIns
-			} else {
-				return prevIns
-			}
-		} else {
-			node = node.next
+	node := list.get(key)
+	if node != nil {
+		if node.next != nil {
+			node.next.prev = node.prev
 		}
+
+		if node.prev != nil {
+			node.prev.next = node.next
+		} else {
+			list.last = node.next
+		}
+
+		if node.prevIns != nil {
+			node.prevIns.nextIns = node.nextIns
+		}
+		if node.nextIns != nil {
+			node.nextIns.prevIns = node.prevIns
+		}
+
+		if node == prevIns {
+			return prevIns.prevIns
+		} else {
+			return prevIns
+		}
+	} else {
+		node = node.next
 	}
 	return prevIns
 }
@@ -102,7 +101,7 @@ func main() {
 	scanner := bufio.NewScanner(fin)
 	scanner.Split(bufio.ScanLines)
 
-	mod := 10000
+	mod := 1000
 	table := make([]LinkedList, mod)
 	var results []string
 
