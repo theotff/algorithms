@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"math"
 	"os"
 	"strings"
 )
@@ -10,6 +11,7 @@ type Node struct {
 	key     string
 	value   string
 	next    *Node
+	prev    *Node
 	prevIns *Node
 	nextIns *Node
 }
@@ -18,85 +20,81 @@ type LinkedList struct {
 	last *Node
 }
 
-func (list *LinkedList) insert(key string, value string, prev *Node) *Node {
+func (list *LinkedList) put(key string, value string, prevIns *Node) *Node {
 	result := list.get(key)
-
 	if result == nil {
 		node := &Node{
 			key:     key,
 			value:   value,
 			next:    list.last,
-			prevIns: prev}
+			prevIns: prevIns,
+			nextIns: nil}
 
+		if list.last != nil {
+			list.last.prev = node
+		}
+		if prevIns != nil {
+			prevIns.nextIns = node
+		}
 		list.last = node
 		return node
 
 	} else {
-		return result
+		result.value = value
+		return prevIns
 	}
+}
+
+func (list *LinkedList) delete(key string, prevIns *Node) *Node {
+	node := list.last
+	for node != nil {
+		if node.key == key {
+			if node.next != nil {
+				node.next.prev = node.prev
+			}
+			if node.prev != nil {
+				node.prev.next = node.next
+			} else {
+				list.last = node.next
+			}
+
+			if node.prevIns != nil {
+				node.prevIns.nextIns = node.nextIns
+			}
+			if node.nextIns != nil {
+				node.nextIns.prevIns = node.prevIns
+			}
+
+			if node == prevIns {
+				return prevIns.prevIns
+			} else {
+				return prevIns
+			}
+		} else {
+			node = node.next
+		}
+	}
+	return prevIns
 }
 
 func (list *LinkedList) get(key string) *Node {
 	node := list.last
-
 	for node != nil {
 		if node.key == key {
 			return node
-
 		} else {
 			node = node.next
 		}
 	}
-
 	return nil
 }
 
-func (list *LinkedList) delete(key string) {
-	node := list.last
-
-	for node != nil {
-		if node.next != nil && node.next.key == key {
-			if node.next.next != nil {
-				swapLinks(node)
-				node.next = node.next.next
-			} else {
-				swapLinks(node)
-				node.next = nil
-			}
-			return
-
-		} else if node.next != nil && node.next.key != key {
-			node = node.next
-
-		} else {
-			if node.key == key {
-				swapLinks(node)
-				list.last = nil
-			}
-
-			return
-		}
-	}
-}
-
-func swapLinks(node *Node) {
-	if node.prevIns != nil && node.nextIns != nil {
-		node.prevIns.nextIns, node.nextIns.prevIns = node.nextIns, node.prevIns
-
-	} else if node.prevIns != nil && node.nextIns == nil {
-		node.prevIns.nextIns = nil
-
-	} else if node.prevIns == nil && node.nextIns != nil {
-		node.nextIns.prevIns = nil
-	}
-}
-
 func hash(key string, mod int) int {
-	sum := 0
+	hashSum := 5381
 	for _, elem := range key {
-		sum += int(elem)
+		hashSum = ((hashSum << 5) + hashSum) + int(elem)
 	}
-	return sum % mod
+	return int(math.Abs(float64(hashSum % mod)))
 }
 
 func main() {
@@ -108,68 +106,52 @@ func main() {
 	table := make([]LinkedList, mod)
 	var results []string
 
-	var insert *Node
+	var prevIns *Node = nil
+	none := "none"
 
 	for scanner.Scan() {
 		txt := scanner.Text()
-		switch {
-		case strings.HasPrefix(txt, "put"):
-			fields := strings.Fields(txt)
-			key, value := fields[1], fields[2]
-			node := table[hash(key, mod)].insert(key, value, insert)
+		fields := strings.Fields(txt)
+		key := fields[1]
+		hashSum := hash(key, mod)
 
-			if insert != nil {
-				insert.nextIns = node
-			}
+		switch fields[0] {
+		case "put":
+			value := fields[2]
+			prevIns = table[hashSum].put(key, value, prevIns)
 
-			insert = node
-
-		case strings.HasPrefix(txt, "get"):
-			key := strings.Fields(txt)[1]
-			result := table[hash(key, mod)].get(key)
-
+		case "get":
+			result := table[hashSum].get(key)
 			if result == nil {
-				results = append(results, "none")
+				results = append(results, none)
 			} else {
 				results = append(results, result.value)
 			}
 
-		case strings.HasPrefix(txt, "delete"):
-			key := strings.Fields(txt)[1]
-			table[hash(key, mod)].delete(key)
+		case "delete":
+			prevIns = table[hashSum].delete(key, prevIns)
 
-		case strings.HasPrefix(txt, "prev"):
-			key := strings.Fields(txt)[1]
-			hashVal := hash(key, mod)
-			result := table[hashVal].get(key)
+		case "prev":
+			result := table[hashSum].get(key)
 
-			if result != nil {
-				if result.prevIns != nil {
-					results = append(results, result.prevIns.value)
-				} else {
-					results = append(results, "none")
-				}
+			if result != nil && result.prevIns != nil {
+				results = append(results, result.prevIns.value)
 			} else {
-				results = append(results, "none")
+				results = append(results, none)
 			}
 
-		case strings.HasPrefix(txt, "next"):
-			key := strings.Fields(txt)[1]
-			hashVal := hash(key, mod)
-			result := table[hashVal].get(key)
+		case "next":
+			result := table[hashSum].get(key)
 
-			if result != nil {
-				if result.nextIns != nil {
-					results = append(results, result.nextIns.value)
-				} else {
-					results = append(results, "none")
-				}
+			if result != nil && result.nextIns != nil {
+				results = append(results, result.nextIns.value)
 			} else {
-				results = append(results, "none")
+				results = append(results, none)
 			}
 
 		}
 	}
+
 	fout, _ := os.Create("linkedmap.out")
 	fout.WriteString(strings.Join(results, "\n"))
 	fout.Close()

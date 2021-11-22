@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"math"
 	"os"
 	"strings"
 )
@@ -10,6 +11,7 @@ type Node struct {
 	key   string
 	value string
 	next  *Node
+	prev  *Node
 }
 
 type LinkedList struct {
@@ -17,56 +19,60 @@ type LinkedList struct {
 }
 
 func (list *LinkedList) insert(key string, value string) {
-	if list.get(key) == "none" {
-		node := &Node{key: key, value: value, next: list.last}
-		list.last = node
-	}
-}
+	result := list.get(key)
+	if result == nil {
+		node := &Node{
+			key:   key,
+			value: value,
+			next:  list.last,
+			prev:  nil}
 
-func (list *LinkedList) get(key string) string {
-	node := list.last
-
-	for node != nil {
-		if node.key == key {
-			return node.value
-
-		} else {
-			node = node.next
+		if list.last != nil {
+			list.last.prev = node
 		}
+		list.last = node
+	} else {
+		result.value = value
 	}
-
-	return "none"
 }
 
 func (list *LinkedList) delete(key string) {
 	node := list.last
 	for node != nil {
-		if node.next != nil && node.next.key == key {
-			if node.next.next != nil {
-				node.next = node.next.next
+		if node.key == key {
+			if node.next != nil {
+				node.next.prev = node.prev
+			}
+			if node.prev != nil {
+				node.prev.next = node.next
 			} else {
-				node.next = nil
+				list.last = node.next
 			}
 			return
-
-		} else if node.next != nil && node.next.key != key {
-			node = node.next
-
 		} else {
-			if node.key == key {
-				list.last = nil
-			}
-			return
+			node = node.next
 		}
 	}
 }
 
-func hash(key string, mod int) int {
-	sum := 0
-	for _, elem := range key {
-		sum += int(elem)
+func (list *LinkedList) get(key string) *Node {
+	node := list.last
+	for node != nil {
+		if node.key == key {
+			return node
+		} else {
+			node = node.next
+		}
 	}
-	return sum % mod
+	return nil
+}
+
+func hash(key string, mod int) int {
+	hashSum := 5381
+	for _, elem := range key {
+		hashSum = ((hashSum << 5) + hashSum) + int(elem)
+	}
+	return int(math.Abs(float64(hashSum % mod)))
 }
 
 func main() {
@@ -80,19 +86,25 @@ func main() {
 
 	for scanner.Scan() {
 		txt := scanner.Text()
-		switch {
-		case strings.HasPrefix(txt, "put"):
-			fields := strings.Fields(txt)
-			key, value := fields[1], fields[2]
-			table[hash(key, mod)].insert(key, value)
+		fields := strings.Fields(txt)
+		key := fields[1]
+		hashSum := hash(key, mod)
 
-		case strings.HasPrefix(txt, "get"):
-			key := strings.Fields(txt)[1]
-			results = append(results, table[hash(key, mod)].get(key))
+		switch fields[0] {
+		case "put":
+			value := fields[2]
+			table[hashSum].insert(key, value)
 
-		case strings.HasPrefix(txt, "delete"):
-			key := strings.Fields(txt)[1]
-			table[hash(key, mod)].delete(key)
+		case "get":
+			node := table[hashSum].get(key)
+			if node != nil {
+				results = append(results, node.value)
+			} else {
+				results = append(results, "none")
+			}
+
+		case "delete":
+			table[hashSum].delete(key)
 		}
 	}
 

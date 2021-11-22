@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"math"
 	"os"
 	"strconv"
@@ -12,6 +11,7 @@ import (
 type Node struct {
 	data int
 	next *Node
+	prev *Node
 }
 
 type LinkedList struct {
@@ -20,7 +20,14 @@ type LinkedList struct {
 
 func (list *LinkedList) insert(val int) {
 	if !(list.exists(val)) {
-		node := &Node{data: val, next: list.last}
+		node := &Node{
+			data: val,
+			next: list.last,
+			prev: nil}
+
+		if list.last != nil {
+			list.last.prev = node
+		}
 		list.last = node
 	}
 }
@@ -28,22 +35,18 @@ func (list *LinkedList) insert(val int) {
 func (list *LinkedList) delete(val int) {
 	node := list.last
 	for node != nil {
-		if node.next != nil && node.next.data == val {
-			if node.next.next != nil {
-				node.next = node.next.next
+		if node.data == val {
+			if node.next != nil {
+				node.next.prev = node.prev
+			}
+			if node.prev != nil {
+				node.prev.next = node.next
 			} else {
-				node.next = nil
+				list.last = node.next
 			}
 			return
-
-		} else if node.next != nil && node.next.data != val {
-			node = node.next
-
 		} else {
-			if node.data == val {
-				list.last = nil
-			}
-			return
+			node = node.next
 		}
 	}
 }
@@ -62,7 +65,7 @@ func (list *LinkedList) exists(val int) bool {
 }
 
 func hash(n int, mod int) int {
-	return int(math.Abs(float64(n % 100)))
+	return int(math.Abs(float64(n % mod)))
 }
 
 func main() {
@@ -72,34 +75,27 @@ func main() {
 
 	mod := 10000
 	table := make([]LinkedList, mod)
-	var results []bool
+	var results []string
 
 	for scanner.Scan() {
 		txt := scanner.Text()
+		fields := strings.Fields(txt)
+		n, _ := strconv.Atoi(fields[1])
+		hashSum := hash(n, mod)
 
-		switch {
-		case strings.HasPrefix(txt, "insert"):
-			var n int
-			fmt.Sscanf(txt, "insert %d", &n)
-			table[hash(n, mod)].insert(n)
+		switch fields[0] {
+		case "insert":
+			table[hashSum].insert(n)
 
-		case strings.HasPrefix(txt, "delete"):
-			var n int
-			fmt.Sscanf(txt, "delete %d", &n)
-			table[hash(n, mod)].delete(n)
+		case "delete":
+			table[hashSum].delete(n)
 
-		case strings.HasPrefix(txt, "exists"):
-			var n int
-			fmt.Sscanf(txt, "exists %d", &n)
-			results = append(results, table[hash(n, mod)].exists(n))
+		case "exists":
+			results = append(results, strconv.FormatBool(table[hashSum].exists(n)))
 		}
-	}
-	strResults := make([]string, len(results))
-	for index, elem := range results {
-		strResults[index] = strconv.FormatBool(elem)
 	}
 
 	fout, _ := os.Create("set.out")
-	fout.WriteString(strings.Join(strResults, "\n"))
+	fout.WriteString(strings.Join(results, "\n"))
 	fout.Close()
 }
