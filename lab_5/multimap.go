@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-const mod = 1000
+const mod int = 1000
 
 type Node struct {
 	key   string

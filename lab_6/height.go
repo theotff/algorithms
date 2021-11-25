@@ -24,7 +24,6 @@ func (tree *BST) createNode(array [][]int, index int) *Node {
 		node.left = tree.createNode(array, array[index][1]-1)
 		node.right = tree.createNode(array, array[index][2]-1)
 		return node
-
 	} else {
 		return nil
 	}

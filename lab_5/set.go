@@ -59,11 +59,7 @@ func (list *LinkedList) get(value int) *Node {
 }
 
 func (list *LinkedList) exists(value int) bool {
-	if list.get(value) != nil {
-		return true
-	} else {
-		return false
-	}
+	return list.get(value) != nil
 }
 
 func hash(num int, mod int) int {
