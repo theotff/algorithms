@@ -39,3 +39,6 @@
 - [BST Check](lab_6/check.go)
 - [Simple Binary Search Tree](lab_6/bstsimple.go)
 - [Quack](lab_6/quack.go)
+
+### Lab 7
+- [BST Balance](lab_7/balance.go)
