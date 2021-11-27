@@ -64,9 +64,7 @@ func main() {
 	}
 
 	if len(array) != 0 {
-		tree.root = &Node{value: array[0][0]}
-		tree.root.left = tree.createNode(array, array[0][1]-1)
-		tree.root.right = tree.createNode(array, array[0][2]-1)
+		tree.root = tree.createNode(array, 0)
 	}
 
 	state = tree.isBst(tree.root, -1000000000, 1000000000)
