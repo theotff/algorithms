@@ -39,7 +39,7 @@ func (tree *BST) createNode(array [][]int, index int) (*Node, int) {
 	}
 }
 
-func (tree *BST) balance(value int) int {
+func (tree *BST) getBalance(value int) int {
 	node := tree.get(value)
 	return node.balance
 }
@@ -85,7 +85,7 @@ func main() {
 	results := make([]string, n)
 
 	for index, elem := range array {
-		results[index] = fmt.Sprint(tree.balance(elem[0]))
+		results[index] = fmt.Sprint(tree.getBalance(elem[0]))
 	}
 
 	fout, _ := os.Create("balance.out")
