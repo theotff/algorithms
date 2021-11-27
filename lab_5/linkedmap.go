@@ -67,12 +67,9 @@ func (list *LinkedList) delete(key string, prevIns *Node) *Node {
 
 		if node == prevIns {
 			return prevIns.prevIns
-		} else {
-			return prevIns
 		}
-	} else {
-		node = node.next
 	}
+
 	return prevIns
 }
 
