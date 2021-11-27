@@ -133,8 +133,7 @@ func main() {
 	var results []string
 
 	for scanner.Scan() {
-		txt := scanner.Text()
-		fields := strings.Fields(txt)
+		fields := strings.Fields(scanner.Text())
 		key := fields[1]
 		hashSum := hash(key, mod)
 
