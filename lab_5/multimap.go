@@ -98,20 +98,15 @@ func (list *LinkedList) delete(key string, value string) {
 }
 
 func (list *LinkedList) deleteAll(key string) {
-	node := list.last
-	for node != nil {
-		if node.key == key {
-			if node.next != nil {
-				node.next.prev = node.prev
-			}
-			if node.prev != nil {
-				node.prev.next = node.next
-			} else {
-				list.last = node.next
-			}
-			return
+	node := list.get(key)
+	if node != nil {
+		if node.next != nil {
+			node.next.prev = node.prev
+		}
+		if node.prev != nil {
+			node.prev.next = node.next
 		} else {
-			node = node.next
+			list.last = node.next
 		}
 	}
 }
