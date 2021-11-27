@@ -2,7 +2,7 @@
 ---
 ### Lab 1
 - [A + B](lab_1/aplusb.go)
-- [A + B**2](lab_1/aplusbb.go)
+- [A + B^2](lab_1/aplusbb.go)
 - [Turtle](lab_1/turtle.go)
 - [Smallsort](lab_1/smallsort.go)
 - [Sortland](lab_1/sortland.go)

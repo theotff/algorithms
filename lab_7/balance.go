@@ -39,24 +39,6 @@ func (tree *BST) createNode(array [][]int, index int) (*Node, int) {
 	}
 }
 
-func (tree *BST) height(root *Node) int {
-	if root != nil {
-		var height int
-		rHeight := tree.height(root.right)
-		lHeight := tree.height(root.left)
-
-		if rHeight > lHeight {
-			height = rHeight
-		} else {
-			height = lHeight
-		}
-
-		return height + 1
-	} else {
-		return 0
-	}
-}
-
 func (tree *BST) balance(value int) int {
 	node := tree.get(value)
 	return node.balance
