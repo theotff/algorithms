@@ -42,3 +42,4 @@
 
 ### Lab 7
 - [BST Balance](lab_7/balance.go)
+- [Left Tree Rotation](lab_7/rotation.go)
