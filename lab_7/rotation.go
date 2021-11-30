@@ -9,10 +9,10 @@ import (
 )
 
 type Node struct {
-	value   int
-	balance int
-	left    *Node
-	right   *Node
+	value  int
+	height int
+	left   *Node
+	right  *Node
 }
 
 type BST struct {
@@ -26,11 +26,12 @@ func (tree *BST) createNode(array [][]int, index int) (*Node, int) {
 		node := &Node{value: array[index][0]}
 		node.left, lHeight = tree.createNode(array, array[index][1]-1)
 		node.right, rHeight = tree.createNode(array, array[index][2]-1)
-		node.balance = rHeight - lHeight
 
 		if lHeight > rHeight {
+			node.height = lHeight + 1
 			return node, lHeight + 1
 		} else {
+			node.height = rHeight + 1
 			return node, rHeight + 1
 		}
 
@@ -60,16 +61,16 @@ func (tree *BST) height(root *Node) int {
 func (tree *BST) rightRotation(root *Node) *Node {
 	newRoot := root.left
 	newRoot.right, root.left = root, newRoot.right
-	newRoot.balance = tree.height(newRoot.right) - tree.height(newRoot.left)
-	newRoot.right.balance = tree.height(newRoot.right.right) - tree.height(newRoot.right.left)
+	newRoot.height = tree.height(newRoot)
+	newRoot.right.height = tree.height(newRoot.right)
 	return newRoot
 }
 
 func (tree *BST) leftRotation(root *Node) *Node {
 	newRoot := root.right
 	newRoot.left, root.right = root, newRoot.left
-	newRoot.balance = tree.height(newRoot.right) - tree.height(newRoot.left)
-	newRoot.left.balance = tree.height(newRoot.left.right) - tree.height(newRoot.left.left)
+	newRoot.height = tree.height(newRoot)
+	newRoot.left.height = tree.height(newRoot.left)
 	return newRoot
 }
 
@@ -79,8 +80,26 @@ func (tree *BST) rightLeftRotation(root *Node) *Node {
 	return root
 }
 
+func (tree *BST) getBalance(node *Node) int {
+	var rHeight int
+	var lHeight int
+
+	if node.right != nil {
+		rHeight = node.right.height
+	} else {
+		rHeight = 0
+	}
+
+	if node.left != nil {
+		lHeight = node.left.height
+	} else {
+		lHeight = 0
+	}
+	return rHeight - lHeight
+}
+
 func (tree *BST) balance() {
-	if tree.root.right.balance != -1 {
+	if tree.getBalance(tree.root.right) != -1 {
 		tree.root = tree.leftRotation(tree.root)
 	} else {
 		tree.root = tree.rightLeftRotation(tree.root)

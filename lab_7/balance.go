@@ -9,10 +9,10 @@ import (
 )
 
 type Node struct {
-	value   int
-	balance int
-	left    *Node
-	right   *Node
+	value  int
+	height int
+	left   *Node
+	right  *Node
 }
 
 type BST struct {
@@ -26,11 +26,12 @@ func (tree *BST) createNode(array [][]int, index int) (*Node, int) {
 		node := &Node{value: array[index][0]}
 		node.left, lHeight = tree.createNode(array, array[index][1]-1)
 		node.right, rHeight = tree.createNode(array, array[index][2]-1)
-		node.balance = rHeight - lHeight
 
 		if lHeight > rHeight {
+			node.height = lHeight + 1
 			return node, lHeight + 1
 		} else {
+			node.height = rHeight + 1
 			return node, rHeight + 1
 		}
 
@@ -41,7 +42,21 @@ func (tree *BST) createNode(array [][]int, index int) (*Node, int) {
 
 func (tree *BST) getBalance(value int) int {
 	node := tree.get(value)
-	return node.balance
+	var rHeight int
+	var lHeight int
+
+	if node.right != nil {
+		rHeight = node.right.height
+	} else {
+		rHeight = 0
+	}
+
+	if node.left != nil {
+		lHeight = node.left.height
+	} else {
+		lHeight = 0
+	}
+	return rHeight - lHeight
 }
 
 func (tree *BST) get(value int) *Node {
