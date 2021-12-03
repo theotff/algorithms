@@ -19,19 +19,21 @@ type BST struct {
 	root *Node
 }
 
-func (tree *BST) createNode(array [][]int, index int) (*Node, int) {
+func (tree *BST) createNode(array [][]int, index int, results []string) (*Node, int) {
 	if index != -1 {
 		var lHeight, rHeight int
 
 		node := &Node{value: array[index][0]}
-		node.left, lHeight = tree.createNode(array, array[index][1]-1)
-		node.right, rHeight = tree.createNode(array, array[index][2]-1)
+		node.left, lHeight = tree.createNode(array, array[index][1]-1, results)
+		node.right, rHeight = tree.createNode(array, array[index][2]-1, results)
 
 		if lHeight > rHeight {
 			node.height = lHeight + 1
+			results[index] = fmt.Sprint(tree.getBalance(node))
 			return node, lHeight + 1
 		} else {
 			node.height = rHeight + 1
+			results[index] = fmt.Sprint(tree.getBalance(node))
 			return node, rHeight + 1
 		}
 
@@ -40,8 +42,7 @@ func (tree *BST) createNode(array [][]int, index int) (*Node, int) {
 	}
 }
 
-func (tree *BST) getBalance(value int) int {
-	node := tree.get(value)
+func (tree *BST) getBalance(node *Node) int {
 	var rHeight int
 	var lHeight int
 
@@ -57,20 +58,6 @@ func (tree *BST) getBalance(value int) int {
 		lHeight = 0
 	}
 	return rHeight - lHeight
-}
-
-func (tree *BST) get(value int) *Node {
-	node := tree.root
-	for node != nil {
-		if node.value == value {
-			return node
-		} else if node.value > value {
-			node = node.left
-		} else {
-			node = node.right
-		}
-	}
-	return node
 }
 
 func main() {
@@ -93,14 +80,10 @@ func main() {
 		array[i] = arr
 	}
 
-	if len(array) != 0 {
-		tree.root, _ = tree.createNode(array, 0)
-	}
-
 	results := make([]string, n)
 
-	for index, elem := range array {
-		results[index] = fmt.Sprint(tree.getBalance(elem[0]))
+	if len(array) != 0 {
+		tree.root, _ = tree.createNode(array, 0, results)
 	}
 
 	fout, _ := os.Create("balance.out")
