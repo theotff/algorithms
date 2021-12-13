@@ -1,5 +1,6 @@
 *.in
 *.out
+*.exe
 misc/
 /.vscode
 /lab_2_test
