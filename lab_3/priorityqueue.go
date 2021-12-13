@@ -28,7 +28,7 @@ func push(heap [][]int, arr []int) [][]int {
 	return heap
 }
 
-func replace(heap [][]int, n int, m int) [][]int {
+func replace(heap [][]int, n, m int) [][]int {
 	ln := len(heap)
 	index := 0
 	for i := 0; i < ln; i++ {

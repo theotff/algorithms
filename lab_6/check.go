@@ -29,7 +29,7 @@ func (tree *BST) createNode(array [][]int, index int) *Node {
 	}
 }
 
-func (tree *BST) isBst(node *Node, min int, max int) bool {
+func (tree *BST) isBst(node *Node, min, max int) bool {
 	if node == nil {
 		return true
 	}

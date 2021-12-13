@@ -20,7 +20,7 @@ type LinkedList struct {
 	last *Node
 }
 
-func (list *LinkedList) put(key string, value string, prevIns *Node) *Node {
+func (list *LinkedList) put(key, value string, prevIns *Node) *Node {
 	result := list.get(key)
 	if result == nil {
 		node := &Node{

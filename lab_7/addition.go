@@ -221,16 +221,16 @@ func main() {
 	tree.serialize(results, tree.root, 0)
 
 	fout, _ := os.Create("addition.out")
+	var foutSize int
 	if state {
-		fmt.Fprintln(fout, n+1)
-		for i := 0; i < n+1; i++ {
-			fmt.Fprintln(fout, strings.Join(results[i], " "))
-		}
+		foutSize = n + 1
 	} else {
-		fmt.Fprintln(fout, n)
-		for i := 0; i < n; i++ {
-			fmt.Fprintln(fout, strings.Join(results[i], " "))
-		}
+		foutSize = n
+	}
+
+	fmt.Fprintln(fout, foutSize)
+	for i := 0; i < foutSize; i++ {
+		fmt.Fprintln(fout, strings.Join(results[i], " "))
 	}
 	fout.Close()
 }

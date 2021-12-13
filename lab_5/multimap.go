@@ -22,7 +22,7 @@ type LinkedList struct {
 	last *Node
 }
 
-func (list *LinkedList) put(key string, value string) {
+func (list *LinkedList) put(key, value string) {
 	result := list.get(key)
 	if result == nil {
 		node := &Node{
@@ -79,7 +79,7 @@ func (list *LinkedList) get(key string) *Node {
 	return nil
 }
 
-func (list *LinkedList) delete(key string, value string) {
+func (list *LinkedList) delete(key, value string) {
 	result := list.get(key)
 	if result != nil {
 		hashSum := hash(value, mod)

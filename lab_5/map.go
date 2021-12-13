@@ -18,7 +18,7 @@ type LinkedList struct {
 	last *Node
 }
 
-func (list *LinkedList) insert(key string, value string) {
+func (list *LinkedList) insert(key, value string) {
 	result := list.get(key)
 	if result == nil {
 		node := &Node{

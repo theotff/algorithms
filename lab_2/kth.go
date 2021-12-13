@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func kth(array []int32, l int, r int, k int) []int32 {
+func kth(array []int32, l, r, k int) []int32 {
 	if l >= r {
 		return array
 	} else {

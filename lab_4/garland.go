@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func search(left float64, right float64, a float64, n int) float64 {
+func search(left, right, a float64, n int) float64 {
 	elem := (left + right) / 2
 	array := make([]float64, n)
 	array[0], array[1] = a, elem
