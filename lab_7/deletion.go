@@ -46,7 +46,6 @@ func (tree *AVL) createNode(array [][]int, index int) (*Node, int) {
 func (tree *AVL) setHeight(root *Node) int {
 	if root != nil {
 		height := intMax(tree.setHeight(root.right), tree.setHeight(root.left))
-
 		root.height = height + 1
 		return height + 1
 	} else {
@@ -81,39 +80,48 @@ func (tree *AVL) leftRightRotation(root *Node) *Node {
 }
 
 func (tree *AVL) balance(root *Node) *Node {
-	balance := tree.getBalance(root)
-	if balance > 1 {
-		if tree.getBalance(root.right) != -1 {
-			root = tree.leftRotation(root)
-		} else {
-			root = tree.rightLeftRotation(root)
+	if root != nil {
+		var balance int
+		balance, root.height = tree.getBalance(root)
+
+		if balance > 1 {
+			rBalance, _ := tree.getBalance(root.right)
+			if rBalance != -1 {
+				root = tree.leftRotation(root)
+			} else {
+				root = tree.rightLeftRotation(root)
+			}
+
+		} else if balance < -1 {
+			lBalance, _ := tree.getBalance(root.left)
+			if lBalance != 1 {
+				root = tree.rightRotation(root)
+			} else {
+				root = tree.leftRightRotation(root)
+			}
 		}
-	} else if balance < -1 {
-		if tree.getBalance(root.left) != 1 {
-			root = tree.rightRotation(root)
-		} else {
-			root = tree.leftRightRotation(root)
-		}
+		return root
+	} else {
+		return nil
 	}
-	return root
+
 }
 
-func (tree *AVL) getBalance(node *Node) int {
-	var rHeight int
-	var lHeight int
+func (tree *AVL) getBalance(node *Node) (int, int) {
+	rHeight := 0
+	lHeight := 0
 
-	if node.right != nil {
-		rHeight = node.right.height
+	if node != nil {
+		if node.right != nil {
+			rHeight = node.right.height
+		}
+		if node.left != nil {
+			lHeight = node.left.height
+		}
+		return rHeight - lHeight, intMax(rHeight, lHeight) + 1
 	} else {
-		rHeight = 0
+		return 0, 0
 	}
-
-	if node.left != nil {
-		lHeight = node.left.height
-	} else {
-		lHeight = 0
-	}
-	return rHeight - lHeight
 }
 
 func (tree *AVL) delete(root *Node, value int) (*Node, bool) {
@@ -121,13 +129,11 @@ func (tree *AVL) delete(root *Node, value int) (*Node, bool) {
 		var state bool
 		if root.value > value {
 			root.left, state = tree.delete(root.left, value)
-			tree.setHeight(root)
 			root = tree.balance(root)
 			return root, state
 
 		} else if root.value < value {
 			root.right, state = tree.delete(root.right, value)
-			tree.setHeight(root)
 			root = tree.balance(root)
 			return root, state
 
@@ -141,7 +147,6 @@ func (tree *AVL) delete(root *Node, value int) (*Node, bool) {
 				rightmost := tree.findRight(root.left)
 				root.value = rightmost.value
 				root.left, _ = tree.delete(root.left, rightmost.value)
-				tree.setHeight(root)
 				root = tree.balance(root)
 				return root, true
 			}
