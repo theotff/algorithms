@@ -19,6 +19,14 @@ type BST struct {
 	root *Node
 }
 
+func intMax(a int, b int) int {
+	if a > b {
+		return a
+	} else {
+		return b
+	}
+}
+
 func (tree *BST) createNode(array [][]int, index int, results []string) (*Node, int) {
 	if index != -1 {
 		var lHeight, rHeight int
@@ -27,18 +35,12 @@ func (tree *BST) createNode(array [][]int, index int, results []string) (*Node, 
 		node.left, lHeight = tree.createNode(array, array[index][1]-1, results)
 		node.right, rHeight = tree.createNode(array, array[index][2]-1, results)
 
-		if lHeight > rHeight {
-			node.height = lHeight + 1
-			results[index] = fmt.Sprint(tree.getBalance(node))
-			return node, lHeight + 1
-		} else {
-			node.height = rHeight + 1
-			results[index] = fmt.Sprint(tree.getBalance(node))
-			return node, rHeight + 1
-		}
+		node.height = intMax(rHeight, lHeight) + 1
+		results[index] = fmt.Sprint(tree.getBalance(node))
+		return node, node.height
 
 	} else {
-		return nil, 0
+		return nil, 1
 	}
 }
 
@@ -49,13 +51,13 @@ func (tree *BST) getBalance(node *Node) int {
 	if node.right != nil {
 		rHeight = node.right.height
 	} else {
-		rHeight = 0
+		rHeight = 1
 	}
 
 	if node.left != nil {
 		lHeight = node.left.height
 	} else {
-		lHeight = 0
+		lHeight = 1
 	}
 	return rHeight - lHeight
 }
