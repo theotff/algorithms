@@ -92,7 +92,6 @@ func (tree *AVL) insert(root *Node, value int) (*Node, bool) {
 		if root.value > value {
 			if root.left != nil {
 				root.left, state = tree.insert(root.left, value)
-				root.height = intMax(root.height, root.left.height+1)
 				root = tree.balance(root)
 				return root, state
 			} else {
@@ -105,7 +104,6 @@ func (tree *AVL) insert(root *Node, value int) (*Node, bool) {
 		} else if root.value < value {
 			if root.right != nil {
 				root.right, state = tree.insert(root.right, value)
-				root.height = intMax(root.height, root.right.height+1)
 				root = tree.balance(root)
 				return root, state
 			} else {
@@ -124,40 +122,49 @@ func (tree *AVL) insert(root *Node, value int) (*Node, bool) {
 	}
 }
 
-func (tree *AVL) getBalance(node *Node) int {
-	var rHeight int
-	var lHeight int
+func (tree *AVL) balance(root *Node) *Node {
+	if root != nil {
+		var balance int
+		balance, root.height = tree.getBalance(root)
 
-	if node.right != nil {
-		rHeight = node.right.height
+		if balance > 1 {
+			rBalance, _ := tree.getBalance(root.right)
+			if rBalance != -1 {
+				root = tree.leftRotation(root)
+			} else {
+				root = tree.rightLeftRotation(root)
+			}
+
+		} else if balance < -1 {
+			lBalance, _ := tree.getBalance(root.left)
+			if lBalance != 1 {
+				root = tree.rightRotation(root)
+			} else {
+				root = tree.leftRightRotation(root)
+			}
+		}
+		return root
 	} else {
-		rHeight = 0
+		return nil
 	}
 
-	if node.left != nil {
-		lHeight = node.left.height
-	} else {
-		lHeight = 0
-	}
-	return rHeight - lHeight
 }
 
-func (tree *AVL) balance(root *Node) *Node {
-	balance := tree.getBalance(root)
-	if balance > 1 {
-		if tree.getBalance(root.right) != -1 {
-			root = tree.leftRotation(root)
-		} else {
-			root = tree.rightLeftRotation(root)
+func (tree *AVL) getBalance(node *Node) (int, int) {
+	rHeight := 0
+	lHeight := 0
+
+	if node != nil {
+		if node.right != nil {
+			rHeight = node.right.height
 		}
-	} else if balance < -1 {
-		if tree.getBalance(root.left) != 1 {
-			root = tree.rightRotation(root)
-		} else {
-			root = tree.leftRightRotation(root)
+		if node.left != nil {
+			lHeight = node.left.height
 		}
+		return rHeight - lHeight, intMax(rHeight, lHeight) + 1
+	} else {
+		return 0, 0
 	}
-	return root
 }
 
 func (tree *AVL) serialize(results [][]string, root *Node, index int) (int, int) {
