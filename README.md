@@ -1,5 +1,4 @@
 ## Good 'ole alogrithms...
----
 ## Sem 1
 - ### Lab 1
     - [A + B](lab_1/aplusb.go)
@@ -47,3 +46,7 @@
   - [AVL Tree Insertion](lab_7/addition.go)
   - [AVL Tree Deletion](lab_7/deletion.go)
   - [AVL Tree](lab_7/avlset.go)
+
+## Sem 2
+- ### Lab 8
+    - [Directed graph adjacency matrix](lab_8/adj_matrix.go)
