@@ -21,7 +21,7 @@ func main() {
 	fin, err := os.Open("input.txt")
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			fin, _ = os.Open("is_oriented.in")
+			fin, _ = os.Open("is_undirected.in")
 		}
 	}
 	scanner := bufio.NewScanner(fin)
@@ -50,7 +50,7 @@ func main() {
 		fout, _ = os.Create("output.txt")
 	} else {
 		if errors.Is(err, os.ErrNotExist) {
-			fout, _ = os.Create("is_oriented.out")
+			fout, _ = os.Create("is_undirected.out")
 		}
 	}
 
