@@ -82,20 +82,17 @@ func (tree *BST) rightLeftRotation(root *Node) *Node {
 }
 
 func (tree *BST) getBalance(node *Node) int {
-	var rHeight int
-	var lHeight int
+	rHeight := 0
+	lHeight := 0
 
 	if node.right != nil {
 		rHeight = node.right.height
-	} else {
-		rHeight = 0
 	}
 
 	if node.left != nil {
 		lHeight = node.left.height
-	} else {
-		lHeight = 0
 	}
+
 	return rHeight - lHeight
 }
 

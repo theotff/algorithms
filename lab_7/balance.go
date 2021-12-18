@@ -40,25 +40,22 @@ func (tree *BST) createNode(array [][]int, index int, results []string) (*Node, 
 		return node, node.height
 
 	} else {
-		return nil, 1
+		return nil, 0
 	}
 }
 
 func (tree *BST) getBalance(node *Node) int {
-	var rHeight int
-	var lHeight int
+	rHeight := 0
+	lHeight := 0
 
 	if node.right != nil {
 		rHeight = node.right.height
-	} else {
-		rHeight = 1
 	}
 
 	if node.left != nil {
 		lHeight = node.left.height
-	} else {
-		lHeight = 1
 	}
+
 	return rHeight - lHeight
 }
 
