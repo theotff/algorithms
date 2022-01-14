@@ -48,7 +48,7 @@ func (list *LinkedList) multiply() {
 
 func main() {
 	dataRaw, _ := ioutil.ReadFile("postfix.in")
-	data := strings.Split(string(dataRaw), "")
+	data := strings.Fields(string(dataRaw))
 
 	stack := &LinkedList{}
 
