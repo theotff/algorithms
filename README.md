@@ -1,11 +1,11 @@
 ## Good 'ole alogrithms...
 ## Sem 1
 - ### Lab 1
-    - [A + B](lab_1/aplusb.go)
-  - [A + B^2](lab_1/aplusbb.go)
-  - [Turtle](lab_1/turtle.go) (Dynamic programming)
-  - [Smallsort](lab_1/smallsort.go) (Bubble Sort)
-  - [Sortland](lab_1/sortland.go) (Bubble Sort)
+    - [A + B](lab_01/aplusb.go)
+  - [A + B^2](lab_01/aplusbb.go)
+  - [Turtle](lab_01/turtle.go) (Dynamic programming)
+  - [Smallsort](lab_01/smallsort.go) (Bubble Sort)
+  - [Sortland](lab_01/sortland.go) (Bubble Sort)
 
 - ### Lab 2
   - [Sort](lab_2/sort.go) (Quick Sort)
