@@ -15,10 +15,10 @@
   - [K'th order statistic](lab_02/kth.go)
 
 - ### Lab 3
-  - [Heap Validation](lab_3/isheap.go)
-  - [Heap Sort](lab_3/heapsort.go)
-  - [Radix Sort](lab_3/radixsort.go)
-  - [Priority Queue](lab_3/priorityqueue.go)
+  - [Heap Validation](lab_03/isheap.go)
+  - [Heap Sort](lab_03/heapsort.go)
+  - [Radix Sort](lab_03/radixsort.go)
+  - [Priority Queue](lab_03/priorityqueue.go)
 
 - ### Lab 4
   - [Stack](lab_4/stack.go)
