@@ -9,6 +9,12 @@ import (
 	"strings"
 )
 
+type Graph struct {
+	verts     int
+	edges     int
+	adjMatrix [][]int
+}
+
 func sum(array []int) int {
 	result := 0
 	for _, elem := range array {
@@ -24,25 +30,26 @@ func main() {
 			fin, _ = os.Open("is_undirected.in")
 		}
 	}
+	graph := &Graph{}
 	scanner := bufio.NewScanner(fin)
 	scanner.Split(bufio.ScanLines)
 	scanner.Scan()
-	vertices, _ := strconv.Atoi(scanner.Text())
+	graph.verts, _ = strconv.Atoi(scanner.Text())
 
-	adj_matrix := make([][]int, vertices)
-	for i := 0; i < vertices; i++ {
-		adj_matrix[i] = make([]int, vertices)
+	graph.adjMatrix = make([][]int, graph.verts)
+	for i := 0; i < graph.verts; i++ {
+		graph.adjMatrix[i] = make([]int, graph.verts)
 	}
 
-	graph_sum := 0
+	graphSum := 0
 
-	for i := 0; i < vertices; i++ {
+	for i := 0; i < graph.verts; i++ {
 		scanner.Scan()
 		data := strings.Fields(scanner.Text())
-		for j := 0; j < vertices; j++ {
-			adj_matrix[i][j], _ = strconv.Atoi(data[j])
+		for j := 0; j < graph.verts; j++ {
+			graph.adjMatrix[i][j], _ = strconv.Atoi(data[j])
 		}
-		graph_sum += sum(adj_matrix[i])
+		graphSum += sum(graph.adjMatrix[i])
 	}
 
 	var fout *os.File
@@ -55,7 +62,7 @@ func main() {
 	}
 
 	result := "NO"
-	if graph_sum >= vertices*2 && graph_sum%2 == 0 {
+	if graphSum >= graph.verts*2 && graphSum%2 == 0 {
 		result = "YES"
 	}
 	fmt.Fprintf(fout, result)
