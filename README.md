@@ -35,10 +35,10 @@
   - [MultiMap](lab_05/multimap.go)
 
 - ### Lab 6
-  - [Tree Height](lab_6/height.go)
-  - [BST Validation](lab_6/check.go)
-  - [Simple Binary Search Tree](lab_6/bstsimple.go)
-  - [Quack Interpreter](lab_6/quack.go)
+  - [Tree Height](lab_06/height.go)
+  - [BST Validation](lab_06/check.go)
+  - [Simple Binary Search Tree](lab_06/bstsimple.go)
+  - [Quack Interpreter](lab_06/quack.go)
 
 - ### Lab 7
   - [BST Balance](lab_7/balance.go)
