@@ -41,11 +41,11 @@
   - [Quack Interpreter](lab_06/quack.go)
 
 - ### Lab 7
-  - [BST Balance](lab_7/balance.go)
-  - [Left Tree Rotation](lab_7/rotation.go)
-  - [AVL Tree Insertion](lab_7/addition.go)
-  - [AVL Tree Deletion](lab_7/deletion.go)
-  - [AVL Tree](lab_7/avlset.go)
+  - [BST Balance](lab_07/balance.go)
+  - [Left Tree Rotation](lab_07/rotation.go)
+  - [AVL Tree Insertion](lab_07/addition.go)
+  - [AVL Tree Deletion](lab_07/deletion.go)
+  - [AVL Tree](lab_07/avlset.go)
 
 ## Sem 2
 - ### Lab 8
