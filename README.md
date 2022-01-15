@@ -8,11 +8,11 @@
   - [Sortland](lab_01/sortland.go) (Bubble Sort)
 
 - ### Lab 2
-  - [Sort](lab_2/sort.go) (Quick Sort)
-  - [Race](lab_2/race.go) (Quick Sort)
-  - [Inversions](lab_2/inversions.go)
-  - [Anti-Quicksort](lab_2/antiqs.go)
-  - [K'th order statistic](lab_2/kth.go)
+  - [Sort](lab_02/sort.go) (Quick Sort)
+  - [Race](lab_02/race.go) (Quick Sort)
+  - [Inversions](lab_02/inversions.go)
+  - [Anti-Quicksort](lab_02/antiqs.go)
+  - [K'th order statistic](lab_02/kth.go)
 
 - ### Lab 3
   - [Heap Validation](lab_3/isheap.go)
