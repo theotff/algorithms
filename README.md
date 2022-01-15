@@ -21,12 +21,12 @@
   - [Priority Queue](lab_03/priorityqueue.go)
 
 - ### Lab 4
-  - [Stack](lab_4/stack.go)
-  - [Queue](lab_4/queue.go)
-  - [Brackets](lab_4/brackets.go) (Stack)
-  - [Postfix Notation](lab_4/postfix.go)
-  - [Binary Search](lab_4/binsearch.go)
-  - [Garland](lab_4/garland.go) (Binary search)
+  - [Stack](lab_04/stack.go)
+  - [Queue](lab_04/queue.go)
+  - [Brackets](lab_04/brackets.go) (Stack)
+  - [Postfix Notation](lab_04/postfix.go)
+  - [Binary Search](lab_04/binsearch.go)
+  - [Garland](lab_04/garland.go) (Binary search)
 
 - ### Lab 5
   - [Set](lab_5/set.go)
