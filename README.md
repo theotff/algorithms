@@ -29,10 +29,10 @@
   - [Garland](lab_04/garland.go) (Binary search)
 
 - ### Lab 5
-  - [Set](lab_5/set.go)
-  - [Map](lab_5/map.go)
-  - [LinkedMap](lab_5/linkedmap.go)
-  - [MultiMap](lab_5/multimap.go)
+  - [Set](lab_05/set.go)
+  - [Map](lab_05/map.go)
+  - [LinkedMap](lab_05/linkedmap.go)
+  - [MultiMap](lab_05/multimap.go)
 
 - ### Lab 6
   - [Tree Height](lab_6/height.go)
