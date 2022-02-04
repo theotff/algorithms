@@ -3,7 +3,7 @@
 - ### Lab 1
     - [A + B](lab_01/aplusb.go)
   - [A + B^2](lab_01/aplusbb.go)
-  - [Turtle](lab_01/turtle.go) (Dynamic programming)
+  - [Turtle](lab_01/turtle.go) (Dynamic Programming)
   - [Smallsort](lab_01/smallsort.go) (Bubble Sort)
   - [Sortland](lab_01/sortland.go) (Bubble Sort)
 
@@ -12,7 +12,7 @@
   - [Race](lab_02/race.go) (Quick Sort)
   - [Inversions](lab_02/inversions.go)
   - [Anti-Quicksort](lab_02/antiqs.go)
-  - [K'th order statistic](lab_02/kth.go)
+  - [K'th Order Statistic](lab_02/kth.go)
 
 - ### Lab 3
   - [Heap Validation](lab_03/isheap.go)
@@ -26,7 +26,7 @@
   - [Brackets](lab_04/brackets.go) (Stack)
   - [Postfix Notation](lab_04/postfix.go)
   - [Binary Search](lab_04/binsearch.go)
-  - [Garland](lab_04/garland.go) (Binary search)
+  - [Garland](lab_04/garland.go) (Binary Search)
 
 - ### Lab 5
   - [Set](lab_05/set.go)
@@ -49,5 +49,5 @@
 
 ## Sem 2
 - ### Lab 8
-  - [Directed graph adjacency matrix](lab_08/adj_matrix.go)
-  - [Is graph undirected](lab_08/is_undirected.go)
+  - [Directed Graph Adjacency Matrix](lab_08/adjMatrix.go)
+  - [Is Graph Undirected](lab_08/is_undirected.go)
