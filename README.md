@@ -49,5 +49,5 @@
 
 ## Sem 2
 - ### Lab 8
-    - [Directed graph adjacency matrix](lab_08/adj_matrix.go)
-    - [Is graph undirected](lab_08/is_undirected.go)
+  - [Directed graph adjacency matrix](lab_08/adj_matrix.go)
+  - [Is graph undirected](lab_08/is_undirected.go)
