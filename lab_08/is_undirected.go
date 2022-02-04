@@ -24,12 +24,16 @@ func sum(array []int) int {
 }
 
 func main() {
+	var fin, fout *os.File
 	fin, err := os.Open("input.txt")
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			fin, _ = os.Open("is_undirected.in")
-		}
+
+	if errors.Is(err, os.ErrNotExist) {
+		fin, _ = os.Open("is_undirected.in")
+		fout, _ = os.Create("is_undirected.out")
+	} else {
+		fout, _ = os.Create("output.txt")
 	}
+
 	graph := &Graph{}
 	scanner := bufio.NewScanner(fin)
 	scanner.Split(bufio.ScanLines)
@@ -50,15 +54,6 @@ func main() {
 			graph.adjMatrix[i][j], _ = strconv.Atoi(data[j])
 		}
 		graphSum += sum(graph.adjMatrix[i])
-	}
-
-	var fout *os.File
-	if err == nil {
-		fout, _ = os.Create("output.txt")
-	} else {
-		if errors.Is(err, os.ErrNotExist) {
-			fout, _ = os.Create("is_undirected.out")
-		}
 	}
 
 	result := "NO"
