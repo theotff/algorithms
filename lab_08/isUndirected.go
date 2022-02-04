@@ -60,5 +60,5 @@ func main() {
 	if graphSum >= graph.verts*2 && graphSum%2 == 0 {
 		result = "YES"
 	}
-	fmt.Fprintf(fout, result)
+	fmt.Fprintln(fout, result)
 }
