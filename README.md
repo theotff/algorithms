@@ -52,3 +52,4 @@
   - [Directed Graph Adjacency Matrix](lab_08/adjMatrix.go)
   - [Is Graph Undirected](lab_08/isUndirected.go)
   - [Check if a Graph Contains Parallel Edges](lab_08/parallelEdges.go)
+  - [Connected Components of a Graph](lab_08/connComponents.go)
