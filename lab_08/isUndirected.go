@@ -15,14 +15,6 @@ type Graph struct {
 	adjMatrix [][]int
 }
 
-func sum(array []int) int {
-	result := 0
-	for _, elem := range array {
-		result += elem
-	}
-	return result
-}
-
 func main() {
 	var fin, fout *os.File
 	fin, err := os.Open("input.txt")
@@ -45,7 +37,7 @@ func main() {
 		graph.adjMatrix[i] = make([]int, graph.verts)
 	}
 
-	graphSum := 0
+	result := "YES"
 
 	for i := 0; i < graph.verts; i++ {
 		scanner.Scan()
@@ -53,12 +45,19 @@ func main() {
 		for j := 0; j < graph.verts; j++ {
 			graph.adjMatrix[i][j], _ = strconv.Atoi(data[j])
 		}
-		graphSum += sum(graph.adjMatrix[i])
 	}
 
-	result := "NO"
-	if graphSum >= graph.verts*2 && graphSum%2 == 0 {
-		result = "YES"
+	for i := 0; i < graph.verts; i++ {
+		if result == "NO" {
+			break
+		}
+		for j := 0; j < graph.verts; j++ {
+			if graph.adjMatrix[i][j] != graph.adjMatrix[j][i] || i == j && graph.adjMatrix[i][j] == 1 {
+				result = "NO"
+				break
+			}
+		}
 	}
+
 	fmt.Fprintln(fout, result)
 }
