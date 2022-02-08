@@ -13,48 +13,48 @@ type Node struct {
 	next *Node
 }
 
-type LinkedList struct {
+type Stack struct {
 	last *Node
 }
 
-func (list *LinkedList) insert(data int) {
-	node := &Node{data: data, next: list.last}
-	list.last = node
+func (s *Stack) push(data int) {
+	node := &Node{data: data, next: s.last}
+	s.last = node
 }
 
-func (list *LinkedList) remove() int {
-	value := list.last.data
-	list.last = list.last.next
+func (s *Stack) pop() int {
+	value := s.last.data
+	s.last = s.last.next
 	return value
 }
 
-func (list *LinkedList) add() {
-	val1 := list.remove()
-	val2 := list.remove()
-	list.insert(val2 + val1)
+func (s *Stack) add() {
+	val1 := s.pop()
+	val2 := s.pop()
+	s.push(val2 + val1)
 }
 
-func (list *LinkedList) subtract() {
-	val1 := list.remove()
-	val2 := list.remove()
-	list.insert(val2 - val1)
+func (s *Stack) subtract() {
+	val1 := s.pop()
+	val2 := s.pop()
+	s.push(val2 - val1)
 }
 
-func (list *LinkedList) multiply() {
-	val1 := list.remove()
-	val2 := list.remove()
-	list.insert(val2 * val1)
+func (s *Stack) multiply() {
+	val1 := s.pop()
+	val2 := s.pop()
+	s.push(val2 * val1)
 }
 
 func main() {
 	dataRaw, _ := ioutil.ReadFile("postfix.in")
 	data := strings.Fields(string(dataRaw))
 
-	stack := &LinkedList{}
+	stack := &Stack{}
 
 	for _, elem := range data {
 		if num, err := strconv.Atoi(elem); err == nil {
-			stack.insert(num)
+			stack.push(num)
 		} else {
 			switch elem {
 			case "-":

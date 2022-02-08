@@ -12,27 +12,27 @@ type Node struct {
 	next *Node
 }
 
-type LinkedList struct {
+type Queue struct {
 	first *Node
 	last  *Node
 }
 
-func (list *LinkedList) insert(data int) {
-	if list.last == nil {
+func (q *Queue) push(data int) {
+	if q.last == nil {
 		node := &Node{data: data}
-		list.first = node
-		list.last = node
+		q.first = node
+		q.last = node
 
 	} else {
 		node := &Node{data: data}
-		list.first.next = node
-		list.first = node
+		q.first.next = node
+		q.first = node
 	}
 }
 
-func (list *LinkedList) remove() int {
-	value := list.last.data
-	list.last = list.last.next
+func (q *Queue) pop() int {
+	value := q.last.data
+	q.last = q.last.next
 	return value
 }
 
@@ -45,18 +45,18 @@ func main() {
 	fmt.Sscanf(scanner.Text(), "%d", &n)
 
 	var results []int
-	list := &LinkedList{}
+	q := &Queue{}
 
 	for scanner.Scan() {
 		operation := scanner.Text()
 
 		if len(operation) == 1 {
-			results = append(results, list.remove())
+			results = append(results, q.pop())
 
 		} else {
 			var num int
 			fmt.Sscanf(operation, "+ %d", &num)
-			list.insert(num)
+			q.push(num)
 		}
 	}
 

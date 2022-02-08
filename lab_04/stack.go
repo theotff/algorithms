@@ -12,18 +12,18 @@ type Node struct {
 	next *Node
 }
 
-type LinkedList struct {
+type Stack struct {
 	last *Node
 }
 
-func (list *LinkedList) insert(data int) {
-	node := &Node{data: data, next: list.last}
-	list.last = node
+func (s *Stack) push(data int) {
+	node := &Node{data: data, next: s.last}
+	s.last = node
 }
 
-func (list *LinkedList) remove() int {
-	value := list.last.data
-	list.last = list.last.next
+func (s *Stack) pop() int {
+	value := s.last.data
+	s.last = s.last.next
 	return value
 }
 
@@ -34,18 +34,18 @@ func main() {
 	scanner.Scan()
 
 	var results []int
-	list := &LinkedList{}
+	s := &Stack{}
 
 	for scanner.Scan() {
 		operation := scanner.Text()
 
 		if len(operation) == 1 {
-			results = append(results, list.remove())
+			results = append(results, s.pop())
 
 		} else {
 			var num int
 			fmt.Sscanf(operation, "+ %d", &num)
-			list.insert(num)
+			s.push(num)
 		}
 	}
 
