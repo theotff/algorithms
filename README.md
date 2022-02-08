@@ -54,3 +54,4 @@
   - [Check if a Graph Contains Parallel Edges](lab_08/parallelEdges.go)
   - [Connected Components of a Graph](lab_08/connComponents.go)
   - [Shortest Path In an Unweighted Graph](lab_08/shortestPath.go)
+  - [Labyrinth](lab_08/labyrinth.go) (Shortest Path With Directions)
