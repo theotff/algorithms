@@ -18,7 +18,7 @@ type Graph struct {
 	edges   int
 	adjList []*Node
 	dist    []int
-	visited []int
+	visited []bool
 }
 
 type Queue struct {
@@ -52,7 +52,7 @@ func (g *Graph) construct(verts, edges int) {
 	g.edges = edges
 	g.adjList = make([]*Node, g.verts)
 	g.dist = make([]int, g.verts)
-	g.visited = make([]int, g.verts)
+	g.visited = make([]bool, g.verts)
 }
 
 func main() {
@@ -78,16 +78,16 @@ func main() {
 
 	q := &Queue{}
 	q.push(0)
-	graph.visited[0] = 1
+	graph.visited[0] = true
 	for !q.isEmpty() {
 		ind := q.pop()
 		curDist := graph.dist[ind]
 		ptr := graph.adjList[ind]
 		for ptr != nil {
-			if graph.visited[ptr.val] == 0 {
+			if !graph.visited[ptr.val] {
 				q.push(ptr.val)
 				graph.dist[ptr.val] = curDist + 1
-				graph.visited[ptr.val] = 1
+				graph.visited[ptr.val] = true
 			}
 			ptr = ptr.next
 		}

@@ -38,6 +38,13 @@ type Graph struct {
 	comps   []int
 }
 
+func (g *Graph) construct(verts, edges int) {
+	g.verts = verts
+	g.edges = edges
+	g.adjList = make([]*Node, g.verts)
+	g.comps = make([]int, g.verts)
+}
+
 func main() {
 	fin, _ := os.Open("components.in")
 	graph := &Graph{}
@@ -46,11 +53,10 @@ func main() {
 	scanner.Scan()
 
 	info := strings.Fields(scanner.Text())
-	graph.verts, _ = strconv.Atoi(info[0])
-	graph.edges, _ = strconv.Atoi(info[1])
+	verts, _ := strconv.Atoi(info[0])
+	edges, _ := strconv.Atoi(info[1])
 
-	graph.adjList = make([]*Node, graph.verts)
-	graph.comps = make([]int, graph.verts)
+	graph.construct(verts, edges)
 
 	for i := 0; i < graph.edges; i++ {
 		scanner.Scan()
