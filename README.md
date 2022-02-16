@@ -55,3 +55,6 @@
   - [Connected Components of a Graph](lab_08/connComponents.go) (DFS)
   - [Shortest Path In an Unweighted Graph](lab_08/shortestPath.go) (BFS)
   - [Labyrinth](lab_08/labyrinth.go) (Shortest Path With Directions) (BFS)
+
+- ### Lab 9
+  - [Topological Sort](lab_09/topoSort.go)
