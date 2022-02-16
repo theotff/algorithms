@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 )
 
 type Node struct {
@@ -60,13 +59,9 @@ func main() {
 		}
 	}
 
-	resultArr := make([]string, len(results))
-
-	for i := 0; i < len(results); i++ {
-		resultArr[i] = fmt.Sprint(results[i])
-	}
-
 	fout, _ := os.Create("queue.out")
-	fout.WriteString(strings.Join(resultArr, "\n"))
+	for i := 0; i < len(results); i++ {
+		fmt.Fprintln(fout, results[i])
+	}
 	fout.Close()
 }

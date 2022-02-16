@@ -67,6 +67,6 @@ func main() {
 		}
 	}
 	fout, _ := os.Create("postfix.out")
-	fout.WriteString(fmt.Sprint(stack.last.data))
+	fmt.Fprintln(fout, stack.last.data)
 	fout.Close()
 }

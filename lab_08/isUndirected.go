@@ -60,4 +60,5 @@ func main() {
 	}
 
 	fmt.Fprintln(fout, result)
+	fout.Close()
 }

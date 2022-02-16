@@ -97,4 +97,5 @@ func main() {
 	for _, elem := range graph.dist {
 		fmt.Fprint(fout, elem, " ")
 	}
+	fout.Close()
 }

@@ -93,4 +93,5 @@ func main() {
 	for _, elem := range graph.comps {
 		fmt.Fprint(fout, elem, " ")
 	}
+	fout.Close()
 }

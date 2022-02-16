@@ -42,7 +42,6 @@ func main() {
 	result := search(0, a, a, n)
 
 	fout, _ := os.Create("garland.out")
-	resultString := fmt.Sprintf("%.2f", result)
-	fout.WriteString(resultString)
+	fmt.Fprintf(fout, "%.2f", result)
 	fout.Close()
 }

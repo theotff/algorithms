@@ -166,6 +166,9 @@ func main() {
 	}
 
 	fout, _ := os.Create("rotation.out")
-	fout.WriteString(fmt.Sprint(n) + "\n" + strings.Join(output, "\n"))
+	fmt.Fprintln(fout, n)
+	for _, elem := range output {
+		fmt.Fprintln(fout, elem)
+	}
 	fout.Close()
 }

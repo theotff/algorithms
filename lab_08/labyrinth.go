@@ -144,4 +144,5 @@ func main() {
 	} else {
 		fmt.Fprintln(fout, -1)
 	}
+	fout.Close()
 }

@@ -56,4 +56,5 @@ func main() {
 		}
 		fmt.Fprintln(fout, strings.Join(arr, " "))
 	}
+	fout.Close()
 }
