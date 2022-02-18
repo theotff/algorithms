@@ -35,50 +35,56 @@ type Graph struct {
 	verts   int
 	edges   int
 	adjList []*Node
-	visited []bool
-	cycle   []bool
+	visited []int
 }
 
 func (g *Graph) construct(verts, edges int) {
 	g.verts = verts
 	g.edges = edges
 	g.adjList = make([]*Node, g.verts)
-	g.visited = make([]bool, g.verts)
+	g.visited = make([]int, g.verts)
 }
 
-func (g *Graph) containsCycle() bool {
+func (g *Graph) containsCycle() (bool, []int) {
 	s := &Stack{}
 	for index := range g.adjList {
-		if !g.visited[index] {
-			g.visited[index] = true
+		if g.visited[index] == 0 {
+			g.visited[index] = 1
 			s.push(index)
 			adj := g.adjList[index]
-			g.cycle = make([]bool, g.verts)
-			for adj != nil {
-				if !g.visited[adj.val] {
-					s.push(adj.val)
-					g.visited[adj.val] = true
-				}
-				if g.cycle[adj.val] {
-					return true
-				}
-				g.cycle[adj.val] = true
-				adj = g.adjList[adj.val]
-			}
+
 			for !s.isEmpty() {
 				ind := s.pop()
-				node := g.adjList[ind]
-				for node != nil {
-					if !g.visited[node.val] {
-						s.push(node.val)
-						g.visited[node.val] = true
+				adj = g.adjList[ind]
+				for adj != nil && g.visited[adj.val] != 0 {
+					adj = adj.next
+				}
+				if adj != nil {
+					s.push(ind)
+					for adj != nil {
+						switch g.visited[adj.val] {
+						case 0:
+							s.push(adj.val)
+							g.visited[adj.val] = 1
+						case 1:
+							val := s.pop()
+							arr := make([]int, 0)
+							arr = append(arr, adj.val)
+							for val != adj.val {
+								arr = append(arr, val)
+								val = s.pop()
+							}
+							return true, arr
+						}
+						adj = g.adjList[adj.val]
 					}
-					node = node.next
+				} else {
+					g.visited[ind] = 2
 				}
 			}
 		}
 	}
-	return false
+	return false, []int{}
 }
 
 func main() {
@@ -103,15 +109,14 @@ func main() {
 	}
 
 	fout, _ := os.Create("cycle.out")
-	cycle := graph.containsCycle()
+	cycle, cycleArr := graph.containsCycle()
 	if cycle {
 		fmt.Fprintln(fout, "YES")
-		for i := len(graph.cycle) - 1; i >= 0; i-- {
-			if graph.cycle[i] {
-				fmt.Fprint(fout, i+1, " ")
-			}
+		for _, elem := range cycleArr {
+			fmt.Fprint(fout, elem+1, " ")
 		}
 	} else {
 		fmt.Fprintln(fout, "NO")
 	}
+	fout.Close()
 }
