@@ -57,5 +57,5 @@
   - [Labyrinth](lab_08/labyrinth.go) (Shortest Path With Directions) (BFS)
 
 - ### Lab 9
-  - [Topological Sort](lab_09/topoSort.go)
-  - [Detect Cycle in a Graph](lab_09/cycle.go)
+  - [Topological Sort](lab_09/topoSort.go) (Iterative)
+  - [Detect Cycle in a Graph](lab_09/cycle.go) (Iterative)
