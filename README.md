@@ -59,4 +59,5 @@
 - ### Lab 9
   - [Topological Sort](lab_09/topoSort.go) (Iterative)
   - [Detect Cycle in a Graph](lab_09/cycle.go) (Iterative)
-  - [Check if Graph is Bipartite](lab_09/isBipartite.go)
+  - [Is Graph Bipartite](lab_09/isBipartite.go)
+  - [Is Graph Hamiltonian](lab_09/isHamiltonian.go)
