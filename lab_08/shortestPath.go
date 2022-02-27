@@ -15,7 +15,6 @@ type Node struct {
 
 type Graph struct {
 	verts   int
-	edges   int
 	adjList []*Node
 	dist    []int
 	visited []bool
@@ -47,17 +46,8 @@ func (q *Queue) isEmpty() bool {
 	return q.head == nil
 }
 
-func (g *Graph) construct(verts, edges int) {
-	g.verts = verts
-	g.edges = edges
-	g.adjList = make([]*Node, g.verts)
-	g.dist = make([]int, g.verts)
-	g.visited = make([]bool, g.verts)
-}
-
 func main() {
 	fin, _ := os.Open("pathbge1.in")
-	graph := &Graph{}
 	scanner := bufio.NewScanner(fin)
 	scanner.Split(bufio.ScanLines)
 	scanner.Scan()
@@ -65,9 +55,15 @@ func main() {
 	info := strings.Fields(scanner.Text())
 	verts, _ := strconv.Atoi(info[0])
 	edges, _ := strconv.Atoi(info[1])
-	graph.construct(verts, edges)
 
-	for i := 0; i < graph.edges; i++ {
+	graph := &Graph{
+		verts:   verts,
+		adjList: make([]*Node, verts),
+		dist:    make([]int, verts),
+		visited: make([]bool, verts),
+	}
+
+	for i := 0; i < edges; i++ {
 		scanner.Scan()
 		verts := strings.Fields(scanner.Text())
 		a, _ := strconv.Atoi(verts[0])

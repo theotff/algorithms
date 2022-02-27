@@ -24,12 +24,6 @@ type Graph struct {
 	start  []int
 }
 
-func (g *Graph) construct(w, h int) {
-	g.width = w
-	g.height = h
-	g.matrix = make([][]*Cell, h)
-}
-
 type Node struct {
 	cell *Cell
 	next *Node
@@ -72,14 +66,18 @@ func main() {
 		fout, _ = os.Create("output.txt")
 	}
 
-	graph := &Graph{}
 	scanner := bufio.NewScanner(fin)
 	scanner.Split(bufio.ScanLines)
 	scanner.Scan()
 	info := strings.Fields(scanner.Text())
 	h, _ := strconv.Atoi(info[0])
 	w, _ := strconv.Atoi(info[1])
-	graph.construct(w, h)
+
+	graph := &Graph{
+		height: h,
+		width:  w,
+		matrix: make([][]*Cell, h),
+	}
 
 	for i := 0; i < graph.height; i++ {
 		graph.matrix[i] = make([]*Cell, graph.width)

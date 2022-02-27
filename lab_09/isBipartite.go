@@ -41,16 +41,8 @@ func (q *Queue) isEmpty() bool {
 
 type Graph struct {
 	verts   int
-	edges   int
 	adjList []*Node
 	color   []int
-}
-
-func (g *Graph) construct(verts, edges int) {
-	g.verts = verts
-	g.edges = edges
-	g.adjList = make([]*Node, g.verts)
-	g.color = make([]int, g.verts)
 }
 
 func (g *Graph) isBipartite() bool {
@@ -84,7 +76,6 @@ func (g *Graph) isBipartite() bool {
 
 func main() {
 	fin, _ := os.Open("bipartite.in")
-	graph := &Graph{}
 	scanner := bufio.NewScanner(fin)
 	scanner.Split(bufio.ScanLines)
 	scanner.Scan()
@@ -93,9 +84,13 @@ func main() {
 	verts, _ := strconv.Atoi(info[0])
 	edges, _ := strconv.Atoi(info[1])
 
-	graph.construct(verts, edges)
+	graph := &Graph{
+		verts:   verts,
+		adjList: make([]*Node, verts),
+		color:   make([]int, verts),
+	}
 
-	for i := 0; i < graph.edges; i++ {
+	for i := 0; i < edges; i++ {
 		scanner.Scan()
 		verts := strings.Fields(scanner.Text())
 		a, _ := strconv.Atoi(verts[0])
