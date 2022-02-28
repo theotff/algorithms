@@ -107,8 +107,8 @@ func main() {
 	cycle, cycleArr := graph.containsCycle()
 	if cycle {
 		fmt.Fprintln(fout, "YES")
-		for _, elem := range cycleArr {
-			fmt.Fprint(fout, elem+1, " ")
+		for i := len(cycleArr) - 1; i >= 0; i-- {
+			fmt.Fprint(fout, cycleArr[i]+1, " ")
 		}
 	} else {
 		fmt.Fprintln(fout, "NO")
