@@ -47,28 +47,32 @@ type Graph struct {
 
 func (g *Graph) isBipartite() bool {
 	q := &Queue{}
-	g.color[0] = 1
-	q.push(0)
 	color := map[int]int{
 		1: 2,
 		2: 1,
 	}
 
-	for !q.isEmpty() {
-		ind := q.pop()
-		ptr := g.adjList[ind]
-		for ptr != nil {
-			if ind == ptr.val {
-				return false
+	for index := range g.adjList {
+		if g.color[index] == 0 {
+			g.color[index] = 1
+			q.push(index)
+			for !q.isEmpty() {
+				ind := q.pop()
+				ptr := g.adjList[ind]
+				for ptr != nil {
+					if ind == ptr.val {
+						return false
+					}
+					if g.color[ptr.val] == 0 {
+						q.push(ptr.val)
+						g.color[ptr.val] = color[g.color[ind]]
+					}
+					if g.color[ptr.val] == g.color[ind] {
+						return false
+					}
+					ptr = ptr.next
+				}
 			}
-			if g.color[ptr.val] == 0 {
-				q.push(ptr.val)
-				g.color[ptr.val] = color[g.color[ind]]
-			}
-			if g.color[ptr.val] == g.color[ind] {
-				return false
-			}
-			ptr = ptr.next
 		}
 	}
 	return true
