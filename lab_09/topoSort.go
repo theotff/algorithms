@@ -49,7 +49,7 @@ func (g *Graph) topoSort(sorted []int) bool {
 			for !s.isEmpty() {
 				ind := s.pop()
 				adj = g.adjList[ind]
-				for adj != nil && g.visited[adj.val] != 0 {
+				for adj != nil && g.visited[adj.val] == 2 {
 					adj = adj.next
 				}
 				if adj != nil {
