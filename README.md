@@ -51,7 +51,7 @@
 - ### Lab 8
   - [Directed Graph Adjacency Matrix](lab_08/adjMatrix.go)
   - [Is Graph Undirected](lab_08/isUndirected.go)
-  - [Check if a Graph Contains Parallel Edges](lab_08/parallelEdges.go)
+  - [Does a Graph Contain Parallel Edges](lab_08/parallelEdges.go)
   - [Connected Components of a Graph](lab_08/connComponents.go) (DFS)
   - [Shortest Path In an Unweighted Graph](lab_08/shortestPath.go) (BFS)
   - [Labyrinth](lab_08/labyrinth.go) (Shortest Path With Directions) (BFS)
