@@ -37,8 +37,15 @@ type Graph struct {
 	visited []int
 }
 
+func reverse(arr []int) []int {
+	for i, j := 0, len(arr)-1; i < j; i, j = i+1, j-1 {
+		arr[i], arr[j] = arr[j], arr[i]
+	}
+	return arr
+}
+
 func (g *Graph) topoSort(sorted []int) bool {
-	s := &Stack{}
+	s := new(Stack)
 	sortInd := 0
 	for index := range g.adjList {
 		if g.visited[index] == 0 {
@@ -72,6 +79,7 @@ func (g *Graph) topoSort(sorted []int) bool {
 			}
 		}
 	}
+	reverse(sorted)
 	return false
 }
 
@@ -105,7 +113,7 @@ func main() {
 	if cycle {
 		fmt.Fprintln(fout, -1)
 	} else {
-		for i := len(sorted) - 1; i >= 0; i-- {
+		for i := 0; i < len(sorted); i++ {
 			fmt.Fprint(fout, sorted[i]+1, " ")
 		}
 	}
