@@ -13,80 +13,44 @@ type Node struct {
 	next *Node
 }
 
-type Stack struct {
-	head *Node
-}
-
-func (s *Stack) push(val int) {
-	s.head = &Node{val: val, next: s.head}
-}
-
-func (s *Stack) pop() int {
-	value := s.head.val
-	s.head = s.head.next
-	return value
-}
-
-func (s *Stack) isEmpty() bool {
-	return s.head == nil
-}
-
 type Graph struct {
 	verts   int
 	adjList []*Node
-	visited []bool
+	depth   []int
 }
 
-func (g *Graph) topoSort() []int {
-	sorted := make([]int, g.verts)
-	s := &Stack{}
-	sortInd := 0
-	for index := range g.adjList {
-		if !g.visited[index] {
-			g.visited[index] = true
-			s.push(index)
-			adj := g.adjList[index]
-
-			for !s.isEmpty() {
-				ind := s.pop()
-				adj = g.adjList[ind]
-				for adj != nil && g.visited[adj.val] {
-					adj = adj.next
-				}
-				if adj != nil {
-					s.push(ind)
-					for adj != nil {
-						if !g.visited[adj.val] {
-							s.push(adj.val)
-							g.visited[adj.val] = true
-						}
-						adj = g.adjList[adj.val]
-					}
-				} else {
-					sorted[sortInd] = ind
-					sortInd += 1
-				}
-			}
+func (g *Graph) DFS(pos int) {
+	adj := g.adjList[pos]
+	vertDepth := g.depth[pos]
+	for adj != nil {
+		if g.depth[adj.val] == 0 {
+			g.DFS(adj.val)
 		}
+		vertDepth = intMax(vertDepth, g.depth[adj.val])
+		adj = adj.next
 	}
-	return sorted
+	g.depth[pos] = vertDepth + 1
 }
 
 func (g *Graph) isHamiltonian() bool {
-	sorted := g.topoSort()
-	for i := 0; i < len(sorted)-1; i++ {
-		ptr := g.adjList[i]
-		for ptr != nil {
-			if ptr.val == i+1 {
-				break
-			}
-			ptr = ptr.next
-		}
-		if ptr == nil {
-			return false
+	for i := 0; i < g.verts; i++ {
+		if g.depth[i] == 0 {
+			g.DFS(i)
 		}
 	}
-	return true
+	for _, elem := range g.depth {
+		if elem == g.verts {
+			return true
+		}
+	}
+	return false
+}
+
+func intMax(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
 }
 
 func main() {
@@ -102,7 +66,7 @@ func main() {
 	graph := &Graph{
 		verts:   verts,
 		adjList: make([]*Node, verts),
-		visited: make([]bool, verts),
+		depth:   make([]int, verts),
 	}
 
 	for i := 0; i < edges; i++ {
