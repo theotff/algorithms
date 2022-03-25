@@ -60,5 +60,7 @@
   - [Topological Sort](lab_09/topoSort.go) (Iterative)
   - [Detect Cycle in a Graph](lab_09/cycle.go) (Iterative)
   - [Is Graph Bipartite](lab_09/isBipartite.go)
-  - [Graph Condensation](lab_09/condensation.go) (Strongly Connected Components)
   - [Is Graph Hamiltonian](lab_09/isHamiltonian.go)
+
+- ### Lab 10
+- [Graph Vertex Degrees](lab_10/degrees.go)
