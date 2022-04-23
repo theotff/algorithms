@@ -63,4 +63,7 @@
   - [Is Graph Hamiltonian](lab_09/isHamiltonian.go)
 
 - ### Lab 10
-- [Graph Vertex Degrees](lab_10/degrees.go)
+  - [Graph Vertex Degrees](lab_10/degrees.go)
+  
+- ### Lab 11
+  - [Dijkstra Algorithm](lab_11/pathmgep.go)
