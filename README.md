@@ -67,3 +67,5 @@
   
 - ### Lab 11
   - [Dijkstra Algorithm](lab_11/pathmgep.go)
+  - [Graph APSP Problem](lab_11/pathsg.go)
+  - [Dijkstra Algotithm on a Large Undirected Graph](lab_11/pathbgep.go)
